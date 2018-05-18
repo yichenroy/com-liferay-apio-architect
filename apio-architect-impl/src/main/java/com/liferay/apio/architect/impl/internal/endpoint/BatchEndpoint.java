@@ -25,6 +25,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 /**
+ * @author Alejandro Hernández
  * @author Zoltán Takács
  */
 public interface BatchEndpoint {

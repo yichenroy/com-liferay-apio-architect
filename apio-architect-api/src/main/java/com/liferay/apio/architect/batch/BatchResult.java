@@ -17,6 +17,7 @@ package com.liferay.apio.architect.batch;
 import java.util.List;
 
 /**
+ * @author Alejandro Hernández
  * @author Zoltán Takács
  */
 public class BatchResult<T> {
