@@ -32,6 +32,14 @@ import javax.ws.rs.core.Response;
 public interface RootEndpoint {
 
 	/**
+	 * Returns the endpoint for batch operations.
+	 *
+	 * @return the endpoint
+	 */
+	@Path("/batch/{name}")
+	public BatchEndpoint batchEndpoint(@PathParam("name") String name);
+
+	/**
 	 * Returns the endpoint for binary operations.
 	 *
 	 * @return the endpoint

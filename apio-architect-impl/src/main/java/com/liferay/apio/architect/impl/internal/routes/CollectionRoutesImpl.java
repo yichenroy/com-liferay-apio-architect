@@ -117,7 +117,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("c", "b", _name), _identifierFunction));
+					Arrays.asList("c", _name), _identifierFunction));
 
 			_batchCreatorForm = form;
 

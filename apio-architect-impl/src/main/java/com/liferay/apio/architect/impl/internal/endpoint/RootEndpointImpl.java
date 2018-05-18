@@ -14,7 +14,9 @@
 
 package com.liferay.apio.architect.impl.internal.endpoint;
 
+import static com.liferay.apio.architect.impl.internal.endpoint.ExceptionSupplierUtil.notAllowed;
 import static com.liferay.apio.architect.impl.internal.endpoint.ExceptionSupplierUtil.notFound;
+import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 
 import com.google.gson.JsonObject;
 
@@ -30,6 +32,7 @@ import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.router.Colle
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.router.ItemRouterManager;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.router.NestedCollectionRouterManager;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
+import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
@@ -64,6 +67,23 @@ public class RootEndpointImpl implements RootEndpoint {
 			() -> _collectionRouterManager.getCollectionRoutes(),
 			() -> _itemRouterManager.getItemRoutes(),
 			() -> _nestedCollectionRouterManager.getNestedCollectionRoutes());
+	}
+
+	@Override
+	public BatchEndpoint batchEndpoint(String name) {
+		return body -> Try.fromOptional(
+			() -> _collectionRouterManager.getCollectionRoutesOptional(name),
+			notFound(name)
+		).mapOptional(
+			CollectionRoutes::getBatchCreateItemFunctionOptional,
+			notAllowed(POST, name)
+		).flatMap(
+			function -> function.apply(
+				_httpServletRequest
+			).apply(
+				body
+			)
+		);
 	}
 
 	@Override
