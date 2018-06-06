@@ -279,7 +279,7 @@ public class CollectionRoutesImplTest {
 			collectionRoutes);
 
 		Map map = optional.flatMap(
-			CollectionRoutes::getFormOptional
+			CollectionRoutes::getCreateItemFormOptional
 		).map(
 			form -> {
 				assertThat(form.getId(), is("c/name"));

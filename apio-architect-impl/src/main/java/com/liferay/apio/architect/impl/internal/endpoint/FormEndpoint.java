@@ -63,7 +63,7 @@ public class FormEndpoint {
 			() -> _collectionRoutesFunction.apply(
 				name
 			).flatMap(
-				CollectionRoutes::getFormOptional
+				CollectionRoutes::getCreateItemFormOptional
 			),
 			ExceptionSupplierUtil.notFound(name));
 	}

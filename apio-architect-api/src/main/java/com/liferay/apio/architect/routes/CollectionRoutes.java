@@ -17,6 +17,7 @@ package com.liferay.apio.architect.routes;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
+import com.liferay.apio.architect.alias.routes.BatchCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
 import com.liferay.apio.architect.alias.routes.GetPageFunction;
 import com.liferay.apio.architect.alias.routes.permission.HasAddingPermissionFunction;
@@ -29,6 +30,7 @@ import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -51,14 +53,25 @@ import java.util.Optional;
 public interface CollectionRoutes<T, S> {
 
 	/**
-	 * Returns the function that is used to create a collection item, if the
-	 * endpoint was added through the {@link CollectionRoutes.Builder} and the
-	 * function therefore exists. Returns {@code Optional#empty()} otherwise.
+	 * Returns the form that is used to create multiple collection items, if it
+	 * was added through the {@link Builder}. Returns {@code Optional#empty()}
+	 * otherwise.
+	 *
+	 * @return the form used to create a collection item; {@code
+	 *         Optional#empty()} otherwise
+	 */
+	public Optional<Form> getBatchCreateItemFormOptional();
+
+	/**
+	 * Returns the function that is used to create multiple collection items, if
+	 * the endpoint was added through the {@link Builder} and the function
+	 * therefore exists. Returns {@code Optional#empty()} otherwise.
 	 *
 	 * @return the function used to create a collection item, if the function
 	 *         exists; {@code Optional#empty()} otherwise
 	 */
-	public Optional<CreateItemFunction<T>> getCreateItemFunctionOptional();
+	public Optional<BatchCreateItemFunction<S>>
+		getBatchCreateItemFunctionOptional();
 
 	/**
 	 * Returns the form that is used to create a collection item, if it was
@@ -68,7 +81,17 @@ public interface CollectionRoutes<T, S> {
 	 * @return the form used to create a collection item; {@code
 	 *         Optional#empty()} otherwise
 	 */
-	public Optional<Form> getFormOptional();
+	public Optional<Form> getCreateItemFormOptional();
+
+	/**
+	 * Returns the function that is used to create a collection item, if the
+	 * endpoint was added through the {@link CollectionRoutes.Builder} and the
+	 * function therefore exists. Returns {@code Optional#empty()} otherwise.
+	 *
+	 * @return the function used to create a collection item, if the function
+	 *         exists; {@code Optional#empty()} otherwise
+	 */
+	public Optional<CreateItemFunction<T>> getCreateItemFunctionOptional();
 
 	/**
 	 * Returns the function used to obtain the page, if the endpoint was added
@@ -86,6 +109,12 @@ public interface CollectionRoutes<T, S> {
 	 */
 	@ProviderType
 	public interface Builder<T, S> {
+
+		public <A, R> Builder<T, S> addBatchCreator(
+			ThrowableBiFunction<List<R>, A, List<S>> throwableBiFunction,
+			Class<A> aClass,
+			HasAddingPermissionFunction hasAddingPermissionFunction,
+			FormBuilderFunction<R> formBuilderFunction);
 
 		/**
 		 * Adds a route to a creator function that has one extra parameter.
