@@ -105,9 +105,21 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		}
 
 		@Override
-		public <A, R> Builder<T, S> addBatchCreator(
-			ThrowableBiFunction<List<R>, A, List<S>> throwableBiFunction,
-			Class<A> aClass,
+		public <A, R> Builder<T, S> addCreator(
+			ThrowableBiFunction<R, A, T> throwableBiFunction, Class<A> aClass,
+			HasAddingPermissionFunction hasAddingPermissionFunction,
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			return addCreator(
+				throwableBiFunction, (formList, a) -> Collections.emptyList(),
+				aClass, hasAddingPermissionFunction, formBuilderFunction);
+		}
+
+		@Override
+		public <A, R> Builder<T, S> addCreator(
+			ThrowableBiFunction<R, A, T> creatorThrowableBiFunction,
+			ThrowableBiFunction<List<R>, A, List<S>>
+				batchCreatorThrowableBiFunction, Class<A> aClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
@@ -121,40 +133,23 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			_batchCreatorForm = form;
 
-			_batchCreateItemFunction = httpServletRequest -> body -> provide(
-				_provideFunction.apply(httpServletRequest), aClass,
-				a -> throwableBiFunction.andThen(
-					t -> new BatchResult<>(t, _name)
-				).apply(
-					form.getList(body), a
-				));
-
-			return this;
-		}
-
-		@Override
-		public <A, R> Builder<T, S> addCreator(
-			ThrowableBiFunction<R, A, T> throwableBiFunction, Class<A> aClass,
-			HasAddingPermissionFunction hasAddingPermissionFunction,
-			FormBuilderFunction<R> formBuilderFunction) {
-
-			_neededProviderConsumer.accept(aClass.getName());
-
-			_hasAddingPermissionFunction = hasAddingPermissionFunction;
-
-			Form<R> form = formBuilderFunction.apply(
-				new FormImpl.BuilderImpl<>(
-					Arrays.asList("c", _name), _identifierFunction));
-
 			_creatorForm = form;
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass,
-				a -> throwableBiFunction.andThen(
+				a -> creatorThrowableBiFunction.andThen(
 					t -> new SingleModelImpl<>(
 						t, _name, Collections.emptyList())
 				).apply(
 					form.get(body), a
+				));
+
+			_batchCreateItemFunction = httpServletRequest -> body -> provide(
+				_provideFunction.apply(httpServletRequest), aClass,
+				a -> batchCreatorThrowableBiFunction.andThen(
+					t -> new BatchResult<>(t, _name)
+				).apply(
+					form.getList(body), a
 				));
 
 			return this;
