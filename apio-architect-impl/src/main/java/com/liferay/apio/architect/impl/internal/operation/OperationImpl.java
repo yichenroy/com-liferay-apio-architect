@@ -25,27 +25,38 @@ import java.util.Optional;
  */
 public class OperationImpl implements Operation {
 
-	public OperationImpl(Form form, HTTPMethod httpMethod, String name) {
-		this(form, httpMethod, name, false);
+	public OperationImpl(
+		Form form, HTTPMethod method, String path, String name,
+		boolean collection) {
+
+		this(form, method, path, name, collection, false);
 	}
 
 	public OperationImpl(
-		Form form, HTTPMethod httpMethod, String name, boolean collection) {
+		Form form, HTTPMethod httpMethod, String path, String name, boolean collection,
+		boolean custom) {
 
 		_form = form;
-		_httpMethod = httpMethod;
-		_name = name;
-		_collection = collection;
+
+		this._httpMethod = httpMethod;
+		this._path = path;
+		this._name = name;
+		this._collection = collection;
+		this._custom = custom;
+	}
+
+	public OperationImpl(Form form, HTTPMethod httpMethod, String name) {
+		this(form, httpMethod, name, name, false);
 	}
 
 	public OperationImpl(HTTPMethod httpMethod, String name) {
-		this(null, httpMethod, name, false);
+		this(null, httpMethod, name, name, false);
 	}
 
 	public OperationImpl(
 		HTTPMethod httpMethod, String name, boolean collection) {
 
-		this(null, httpMethod, name, collection);
+		this(null, httpMethod, name, name, collection);
 	}
 
 	@Override
@@ -69,8 +80,24 @@ public class OperationImpl implements Operation {
 	}
 
 	private final boolean _collection;
+
+	public Form getForm() {
+		return _form;
+	}
+
+	public String getPath() {
+		return _path;
+	}
+
+	public boolean isCustom() {
+		return _custom;
+	}
+
 	private final Form _form;
 	private final HTTPMethod _httpMethod;
 	private final String _name;
+	private final String _path;
+	private final boolean _custom;
+
 
 }
