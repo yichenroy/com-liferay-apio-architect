@@ -29,6 +29,14 @@ import java.util.Optional;
 public interface Operation {
 
 	/**
+	 * Return the operation's form.
+	 *
+	 * @return the operation's form.
+	 * @review
+	 */
+	public Form getForm();
+
+	/**
 	 * Returns this operation's expected form, if present; returns {@code
 	 * Optional#empty()} otherwise.
 	 *
@@ -40,16 +48,23 @@ public interface Operation {
 	/**
 	 * Returns the operation's method.
 	 *
-	 * @review the operation's method
+	 * @review
 	 */
 	public HTTPMethod getHttpMethod();
 
 	/**
 	 * Returns the operation's name.
 	 *
-	 * @review the operation's name
+	 * @review
 	 */
 	public String getName();
+
+	/**
+	 * Returns the operation's path.
+	 *
+	 * @review
+	 */
+	public String getPath();
 
 	/**
 	 * Return {@code true} if this is a collection's operation
@@ -58,5 +73,13 @@ public interface Operation {
 	 * @review
 	 */
 	public boolean isCollection();
+
+	/**
+	 * Return {@code true} if this is a custom operation
+	 *
+	 * @return {@code true} if this is a custom operation
+	 * @review
+	 */
+	public boolean isCustom();
 
 }

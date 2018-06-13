@@ -25,6 +25,10 @@ import java.util.Optional;
  */
 public class OperationImpl implements Operation {
 
+	public OperationImpl(Form form, HTTPMethod httpMethod, String name) {
+		this(form, httpMethod, name, name, false);
+	}
+
 	public OperationImpl(
 		Form form, HTTPMethod method, String path, String name,
 		boolean collection) {
@@ -33,20 +37,15 @@ public class OperationImpl implements Operation {
 	}
 
 	public OperationImpl(
-		Form form, HTTPMethod httpMethod, String path, String name, boolean collection,
-		boolean custom) {
+		Form form, HTTPMethod httpMethod, String path, String name,
+		boolean collection, boolean custom) {
 
 		_form = form;
-
-		this._httpMethod = httpMethod;
-		this._path = path;
-		this._name = name;
-		this._collection = collection;
-		this._custom = custom;
-	}
-
-	public OperationImpl(Form form, HTTPMethod httpMethod, String name) {
-		this(form, httpMethod, name, name, false);
+		_httpMethod = httpMethod;
+		_path = path;
+		_name = name;
+		_collection = collection;
+		_custom = custom;
 	}
 
 	public OperationImpl(HTTPMethod httpMethod, String name) {
@@ -54,9 +53,14 @@ public class OperationImpl implements Operation {
 	}
 
 	public OperationImpl(
-		HTTPMethod httpMethod, String name, boolean collection) {
+		HTTPMethod httpMethod, String path, String name, boolean collection) {
 
-		this(null, httpMethod, name, name, collection);
+		this(null, httpMethod, path, name, collection);
+	}
+
+	@Override
+	public Form getForm() {
+		return _form;
 	}
 
 	@Override
@@ -75,29 +79,24 @@ public class OperationImpl implements Operation {
 	}
 
 	@Override
-	public boolean isCollection() {
-		return _collection;
-	}
-
-	private final boolean _collection;
-
-	public Form getForm() {
-		return _form;
-	}
-
 	public String getPath() {
 		return _path;
+	}
+
+	@Override
+	public boolean isCollection() {
+		return _collection;
 	}
 
 	public boolean isCustom() {
 		return _custom;
 	}
 
+	private final boolean _collection;
+	private final boolean _custom;
 	private final Form _form;
 	private final HTTPMethod _httpMethod;
 	private final String _name;
 	private final String _path;
-	private final boolean _custom;
-
 
 }

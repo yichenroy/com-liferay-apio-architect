@@ -305,13 +305,13 @@ public class DocumentationWriter {
 	}
 
 	private Operation _getOperation(
-		String operationName, Optional<Form> formOptional,
-		HTTPMethod httpMethod) {
+		Optional<Form> formOptional, HTTPMethod method, String path,
+		String name, boolean collection) {
 
 		return formOptional.map(
-			form -> new OperationImpl(form, httpMethod, operationName)
+			form -> new OperationImpl(form, method, path, name, collection)
 		).orElse(
-			new OperationImpl(httpMethod, operationName)
+			new OperationImpl(method, path, name, collection)
 		);
 	}
 
@@ -381,26 +381,20 @@ public class DocumentationWriter {
 			itemRoutesMap.getOrDefault(name, null)
 		).ifPresent(
 			itemRoutes -> {
-				String getOperationName = name + "/retrieve";
-
 				Operation getOperation = new OperationImpl(
-					GET, getOperationName, false);
+					GET, name, "/retrieve", false);
 
 				_writeOperation(
 					getOperation, resourceJsonObjectBuilder, name, type);
 
-				String updateOperationName = name + "/update";
-
 				Operation updateOperation = _getOperation(
-					updateOperationName, itemRoutes.getFormOptional(), PUT);
+					itemRoutes.getFormOptional(), PUT, name, "/update", false);
 
 				_writeOperation(
 					updateOperation, resourceJsonObjectBuilder, name, type);
 
-				String deleteOperationName = name + "/delete";
-
 				Operation deleteOperation = new OperationImpl(
-					DELETE, deleteOperationName);
+					DELETE, name, "/delete", false);
 
 				_writeOperation(
 					deleteOperation, resourceJsonObjectBuilder, name, type);
@@ -436,13 +430,12 @@ public class DocumentationWriter {
 		).ifPresent(
 			collectionRoutes -> {
 				_writeOperation(
-					new OperationImpl(GET, resource, true),
+					new OperationImpl(GET, resource, "/create", true),
 					resourceJsonObjectBuilder, resource, type);
 
-				String operationName = resource + "/create";
-
 				Operation createOperation = _getOperation(
-					operationName, collectionRoutes.getFormOptional(), POST);
+					collectionRoutes.getFormOptional(), POST, resource,
+					"/create", true);
 
 				_writeOperation(
 					createOperation, resourceJsonObjectBuilder, resource, type);

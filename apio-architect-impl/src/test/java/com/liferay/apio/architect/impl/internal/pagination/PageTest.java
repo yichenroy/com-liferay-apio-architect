@@ -52,7 +52,7 @@ public class PageTest {
 		_path = new Path("name", "id");
 
 		_operations = Collections.singletonList(
-			new OperationImpl(POST, "operation"));
+			new OperationImpl(POST, "path"));
 
 		_page = new PageImpl<>(
 			"name", _pageItems, pagination, _path, _operations);

@@ -404,7 +404,9 @@ public class NestedCollectionRoutesImpl<T, S, U>
 				)
 			).map(
 				form -> new OperationImpl(
-					form, POST, join("/", _name, _nestedName, "create"))
+					form, POST,
+					join("/", _name, String.valueOf(identifier), _nestedName),
+					"create", true)
 			).map(
 				Operation.class::cast
 			).map(

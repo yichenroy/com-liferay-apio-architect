@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.impl.internal.writer;
 
 import static com.liferay.apio.architect.impl.internal.url.URLCreator.createFormURL;
+import static com.liferay.apio.architect.impl.internal.url.URLCreator.createOperationURL;
 import static com.liferay.apio.architect.impl.internal.writer.util.WriterUtil.getFieldsWriter;
 import static com.liferay.apio.architect.impl.internal.writer.util.WriterUtil.getPathOptional;
 
@@ -176,6 +177,12 @@ public class SingleModelWriter<T> {
 					url -> _singleModelMessageMapper.mapOperationFormURL(
 						_jsonObjectBuilder, operationJSONObjectBuilder, url)
 				);
+
+				_singleModelMessageMapper.mapOperationTarget(
+					_jsonObjectBuilder, operationJSONObjectBuilder,
+					createOperationURL(
+						_requestInfo.getServerURL(), operation,
+						pathOptional.get()));
 
 				_singleModelMessageMapper.mapOperationMethod(
 					_jsonObjectBuilder, operationJSONObjectBuilder,
