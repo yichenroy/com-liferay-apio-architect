@@ -16,7 +16,7 @@ package com.liferay.apio.architect.impl.internal.form;
 
 import static com.liferay.apio.architect.impl.internal.date.DateTransformer.asDate;
 
-import com.liferay.apio.architect.alias.IdentifierFunction;
+import com.liferay.apio.architect.alias.PathToIdentifierFunction;
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.form.FieldType;
@@ -213,10 +213,10 @@ public class FormUtil {
 	 */
 	public static <T> BiConsumer<String, Function<T, Consumer<?>>>
 		getOptionalLinkedModel(
-			Body body, T t, IdentifierFunction identifierFunction) {
+			Body body, T t, PathToIdentifierFunction pathToIdentifierFunction) {
 
 		return (key, function) -> _getLinkedModelValueField(
-			body, key, false, function.apply(t), identifierFunction);
+			body, key, false, function.apply(t), pathToIdentifierFunction);
 	}
 
 	/**
@@ -445,10 +445,10 @@ public class FormUtil {
 	 */
 	public static <T> BiConsumer<String, Function<T, Consumer>>
 		getRequiredLinkedModel(
-			Body body, T t, IdentifierFunction identifierFunction) {
+			Body body, T t, PathToIdentifierFunction pathToIdentifierFunction) {
 
 		return (key, function) -> _getLinkedModelValueField(
-			body, key, true, function.apply(t), identifierFunction);
+			body, key, true, function.apply(t), pathToIdentifierFunction);
 	}
 
 	/**
@@ -624,7 +624,7 @@ public class FormUtil {
 
 	private static void _getLinkedModelValueField(
 		Body body, String key, boolean required, Consumer consumer,
-		IdentifierFunction<?> identifierFunction) {
+		PathToIdentifierFunction<?> pathToIdentifierFunction) {
 
 		Optional<String> optional = body.getValueOptional(key);
 
@@ -633,7 +633,7 @@ public class FormUtil {
 
 			Path path = URLCreator.getPath(url);
 
-			Object object = identifierFunction.apply(path);
+			Object object = pathToIdentifierFunction.apply(path);
 
 			consumer.accept(object);
 		}

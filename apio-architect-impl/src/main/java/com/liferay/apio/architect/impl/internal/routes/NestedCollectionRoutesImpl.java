@@ -19,7 +19,7 @@ import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 
 import static java.lang.String.join;
 
-import com.liferay.apio.architect.alias.IdentifierFunction;
+import com.liferay.apio.architect.alias.PathToIdentifierFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.NestedCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.NestedGetPageFunction;
@@ -32,7 +32,6 @@ import com.liferay.apio.architect.function.throwable.ThrowablePentaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTetraFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
-import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.impl.internal.alias.ProvideFunction;
 import com.liferay.apio.architect.impl.internal.form.FormImpl;
 import com.liferay.apio.architect.impl.internal.operation.OperationImpl;
@@ -87,14 +86,14 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		public BuilderImpl(
 			String name, String nestedName, ProvideFunction provideFunction,
 			Consumer<String> neededProviderConsumer,
-			Function<Path, ? extends Identifier<?>> identifierFunction) {
+			Function<Path, ?> pathToIdentifierFunction) {
 
 			_name = name;
 			_nestedName = nestedName;
 			_provideFunction = provideFunction;
 			_neededProviderConsumer = neededProviderConsumer;
 
-			_identifierFunction = identifierFunction::apply;
+			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
 		}
 
 		@Override
@@ -110,7 +109,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name, _nestedName),
-					_identifierFunction));
+					_pathToIdentifierFunction));
 
 			_form = form;
 
@@ -145,7 +144,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name, _nestedName),
-					_identifierFunction));
+					_pathToIdentifierFunction));
 
 			_form = form;
 
@@ -181,7 +180,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name, _nestedName),
-					_identifierFunction));
+					_pathToIdentifierFunction));
 
 			_form = form;
 
@@ -216,7 +215,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name, _nestedName),
-					_identifierFunction));
+					_pathToIdentifierFunction));
 
 			_form = form;
 
@@ -249,7 +248,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name, _nestedName),
-					_identifierFunction));
+					_pathToIdentifierFunction));
 
 			_form = form;
 
@@ -417,7 +416,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		private Form _form;
 		private ThrowableBiFunction<Credentials, U, Boolean>
 			_hasNestedAddingPermissionFunction;
-		private final IdentifierFunction<?> _identifierFunction;
+		private final PathToIdentifierFunction<?> _pathToIdentifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
 		private NestedCreateItemFunction<T, U> _nestedCreateItemFunction;

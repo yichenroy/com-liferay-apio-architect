@@ -25,5 +25,5 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  * @param  <T> the identifier's type
  */
-public interface IdentifierFunction<T> extends Function<Path, T> {
+public interface PathToIdentifierFunction<T> extends Function<Path, T> {
 }

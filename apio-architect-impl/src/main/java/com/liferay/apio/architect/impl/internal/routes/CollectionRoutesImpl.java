@@ -17,7 +17,7 @@ package com.liferay.apio.architect.impl.internal.routes;
 import static com.liferay.apio.architect.impl.internal.routes.RoutesBuilderUtil.provide;
 import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 
-import com.liferay.apio.architect.alias.IdentifierFunction;
+import com.liferay.apio.architect.alias.PathToIdentifierFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.BatchCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
@@ -95,13 +95,13 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		public BuilderImpl(
 			String name, ProvideFunction provideFunction,
 			Consumer<String> neededProviderConsumer,
-			Function<Path, ?> identifierFunction) {
+			Function<Path, ?> pathToIdentifierFunction) {
 
 			_name = name;
 			_provideFunction = provideFunction;
 			_neededProviderConsumer = neededProviderConsumer;
 
-			_identifierFunction = identifierFunction::apply;
+			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
 		}
 
 		@Override
@@ -129,7 +129,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("c", _name), _identifierFunction));
+					Arrays.asList("c", _name), _pathToIdentifierFunction));
 
 			_batchCreatorForm = form;
 
@@ -165,7 +165,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("c", _name), _identifierFunction));
+					Arrays.asList("c", _name), _pathToIdentifierFunction));
 
 			_creatorForm = form;
 
@@ -197,7 +197,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("c", _name), _identifierFunction));
+					Arrays.asList("c", _name), _pathToIdentifierFunction));
 
 			_creatorForm = form;
 
@@ -229,7 +229,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("c", _name), _identifierFunction));
+					Arrays.asList("c", _name), _pathToIdentifierFunction));
 
 			_creatorForm = form;
 
@@ -260,7 +260,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("c", _name), _identifierFunction));
+					Arrays.asList("c", _name), _pathToIdentifierFunction));
 
 			_creatorForm = form;
 
@@ -419,7 +419,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		private Form _creatorForm;
 		private GetPageFunction<T> _getPageFunction;
 		private HasAddingPermissionFunction _hasAddingPermissionFunction;
-		private final IdentifierFunction<?> _identifierFunction;
+		private final PathToIdentifierFunction<?> _pathToIdentifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
 		private final ProvideFunction _provideFunction;

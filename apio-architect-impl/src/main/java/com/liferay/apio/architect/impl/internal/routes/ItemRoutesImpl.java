@@ -19,7 +19,7 @@ import static com.liferay.apio.architect.impl.internal.routes.RoutesBuilderUtil.
 import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
 import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 
-import com.liferay.apio.architect.alias.IdentifierFunction;
+import com.liferay.apio.architect.alias.PathToIdentifierFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.DeleteItemConsumer;
 import com.liferay.apio.architect.alias.routes.GetItemFunction;
@@ -95,19 +95,18 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 	 * @param <S> the type of the model's identifier (e.g., {@code Long}, {@code
 	 *        String}, etc.)
 	 */
-	@SuppressWarnings("unused")
 	public static class BuilderImpl<T, S> implements Builder<T, S> {
 
 		public BuilderImpl(
 			String name, ProvideFunction provideFunction,
 			Consumer<String> neededProviderConsumer,
-			Function<Path, ?> identifierFunction) {
+			Function<Path, ?> pathToIdentifierFunction) {
 
 			_name = name;
 			_provideFunction = provideFunction;
 			_neededProviderConsumer = neededProviderConsumer;
 
-			_identifierFunction = identifierFunction::apply;
+			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
 		}
 
 		@Override
@@ -308,7 +307,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _identifierFunction));
+					Arrays.asList("u", _name), _pathToIdentifierFunction));
 
 			_form = form;
 
@@ -340,7 +339,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _identifierFunction));
+					Arrays.asList("u", _name), _pathToIdentifierFunction));
 
 			_form = form;
 
@@ -372,7 +371,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _identifierFunction));
+					Arrays.asList("u", _name), _pathToIdentifierFunction));
 
 			_form = form;
 
@@ -403,7 +402,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _identifierFunction));
+					Arrays.asList("u", _name), _pathToIdentifierFunction));
 
 			_form = form;
 
@@ -433,7 +432,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			Form<R> form = formBuilderFunction.apply(
 				new FormImpl.BuilderImpl<>(
-					Arrays.asList("u", _name), _identifierFunction));
+					Arrays.asList("u", _name), _pathToIdentifierFunction));
 
 			_form = form;
 
@@ -493,7 +492,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		private Form _form;
 		private HasRemovePermissionFunction<S> _hasRemovePermissionFunction;
 		private HasUpdatePermissionFunction<S> _hasUpdatePermissionFunction;
-		private final IdentifierFunction<?> _identifierFunction;
+		private final PathToIdentifierFunction<?> _pathToIdentifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
 		private final ProvideFunction _provideFunction;

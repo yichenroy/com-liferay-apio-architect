@@ -22,7 +22,7 @@ import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 
 import static javax.ws.rs.core.Response.noContent;
 
-import com.liferay.apio.architect.alias.IdentifierFunction;
+import com.liferay.apio.architect.alias.PathToIdentifierFunction;
 import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.function.throwable.ThrowableFunction;
@@ -61,7 +61,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		Supplier<Optional<ItemRoutes<T, S>>> itemRoutesSupplier,
 		Function<String, Optional<NestedCollectionRoutes<T, S, Object>>>
 			nestedCollectionRoutesFunction,
-		IdentifierFunction<S> identifierFunction) {
+		PathToIdentifierFunction<S> pathToIdentifierFunction) {
 
 		_name = name;
 		_httpServletRequest = httpServletRequest;
@@ -71,7 +71,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		_representorSupplier = representorSupplier;
 		_itemRoutesSupplier = itemRoutesSupplier;
 		_nestedCollectionRoutesFunction = nestedCollectionRoutesFunction;
-		_identifierFunction = identifierFunction;
+		_pathToIdentifierFunction = pathToIdentifierFunction;
 	}
 
 	@Override
@@ -132,7 +132,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 
 		Path path = new Path(_name, id);
 
-		throwableConsumer.accept(_identifierFunction.apply(path));
+		throwableConsumer.accept(_pathToIdentifierFunction.apply(path));
 
 		return noContent().build();
 	}
@@ -197,7 +197,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 			function -> function.apply(
 				_httpServletRequest
 			).compose(
-				_identifierFunction
+				_pathToIdentifierFunction
 			).apply(
 				new Path(_name, id)
 			).apply(
@@ -250,7 +250,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	private final HttpServletRequest _httpServletRequest;
 	private final Function<String, Optional<Class<Identifier>>>
 		_identifierClassFunction;
-	private final IdentifierFunction<S> _identifierFunction;
+	private final PathToIdentifierFunction<S> _pathToIdentifierFunction;
 	private final Supplier<Optional<ItemRoutes<T, S>>> _itemRoutesSupplier;
 	private final String _name;
 	private final Function<String, Optional<NestedCollectionRoutes
