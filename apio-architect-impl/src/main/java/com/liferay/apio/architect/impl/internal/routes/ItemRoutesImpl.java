@@ -492,9 +492,9 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		private Form _form;
 		private HasRemovePermissionFunction<S> _hasRemovePermissionFunction;
 		private HasUpdatePermissionFunction<S> _hasUpdatePermissionFunction;
-		private final PathToIdentifierFunction<?> _pathToIdentifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
+		private final PathToIdentifierFunction<?> _pathToIdentifierFunction;
 		private final ProvideFunction _provideFunction;
 		private GetItemFunction<T, S> _singleModelFunction;
 		private UpdateItemFunction<T, S> _updateItemFunction;

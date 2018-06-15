@@ -504,7 +504,8 @@ public class FormImpl<T> implements Form<T> {
 	}
 
 	private FormImpl(
-		List<String> paths, PathToIdentifierFunction<?> pathToIdentifierFunction) {
+		List<String> paths,
+		PathToIdentifierFunction<?> pathToIdentifierFunction) {
 
 		_id = String.join("/", paths);
 		_pathToIdentifierFunction = pathToIdentifierFunction;
@@ -512,7 +513,6 @@ public class FormImpl<T> implements Form<T> {
 
 	private Function<AcceptLanguage, String> _descriptionFunction;
 	private final String _id;
-	private final PathToIdentifierFunction<?> _pathToIdentifierFunction;
 	private final Map<String, Function<T, Consumer<List<Boolean>>>>
 		_optionalBooleanLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<Boolean>>>
@@ -539,6 +539,7 @@ public class FormImpl<T> implements Form<T> {
 		_optionalStringLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<String>>> _optionalStrings =
 		new HashMap<>();
+	private final PathToIdentifierFunction<?> _pathToIdentifierFunction;
 	private final Map<String, Function<T, Consumer<List<Boolean>>>>
 		_requiredBooleanLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<Boolean>>>

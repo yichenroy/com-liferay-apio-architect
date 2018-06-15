@@ -32,5 +32,6 @@ import java.util.function.Function;
  */
 @FunctionalInterface
 public interface NestedGetPageFunction<T, S>
-	extends RequestFunction<PathToIdentifierFunction<Function<S, Try<Page<T>>>>> {
+	extends
+		RequestFunction<PathToIdentifierFunction<Function<S, Try<Page<T>>>>> {
 }

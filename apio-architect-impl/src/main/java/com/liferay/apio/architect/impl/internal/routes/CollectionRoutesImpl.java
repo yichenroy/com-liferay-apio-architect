@@ -43,6 +43,7 @@ import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.uri.Path;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -95,13 +96,15 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		public BuilderImpl(
 			String name, ProvideFunction provideFunction,
 			Consumer<String> neededProviderConsumer,
-			Function<Path, ?> pathToIdentifierFunction) {
+			Function<Path, ?> pathToIdentifierFunction,
+			Function<T, S> identifierFunction) {
 
 			_name = name;
 			_provideFunction = provideFunction;
 			_neededProviderConsumer = neededProviderConsumer;
 
 			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
+			_identifierFunction = identifierFunction;
 		}
 
 		@Override
@@ -110,9 +113,26 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			HasAddingPermissionFunction hasAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
+			ThrowableBiFunction<List<R>, A, List<S>>
+				batchCreatorThrowableBiFunction = (formList, a) -> {
+					List<S> list = new ArrayList<>();
+
+					for (R r : formList) {
+						S s = throwableBiFunction.andThen(
+							_identifierFunction::apply
+						).apply(
+							r, a
+						);
+
+						list.add(s);
+					}
+
+					return list;
+				};
+
 			return addCreator(
-				throwableBiFunction, (formList, a) -> Collections.emptyList(),
-				aClass, hasAddingPermissionFunction, formBuilderFunction);
+				throwableBiFunction, batchCreatorThrowableBiFunction, aClass,
+				hasAddingPermissionFunction, formBuilderFunction);
 		}
 
 		@Override
@@ -419,9 +439,10 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		private Form _creatorForm;
 		private GetPageFunction<T> _getPageFunction;
 		private HasAddingPermissionFunction _hasAddingPermissionFunction;
-		private final PathToIdentifierFunction<?> _pathToIdentifierFunction;
+		private final Function<T, S> _identifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
+		private final PathToIdentifierFunction<?> _pathToIdentifierFunction;
 		private final ProvideFunction _provideFunction;
 
 	}

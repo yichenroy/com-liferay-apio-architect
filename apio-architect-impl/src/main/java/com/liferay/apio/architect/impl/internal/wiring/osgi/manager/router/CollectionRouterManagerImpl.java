@@ -23,8 +23,10 @@ import com.liferay.apio.architect.impl.internal.url.ServerURL;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.base.ClassNameBaseManager;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.provider.ProviderManager;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.representable.NameManager;
+import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.representable.RepresentableManager;
 import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.uri.mapper.PathIdentifierMapperManager;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.router.CollectionRouter;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
@@ -97,12 +99,26 @@ public class CollectionRouterManagerImpl
 
 				String name = nameOptional.get();
 
+				Optional<Representor<Object>> representorOptional =
+					_representableManager.getRepresentorOptional(name);
+
+				if (!representorOptional.isPresent()) {
+					warning(
+						"Unable to find a Representable for class name " +
+							className);
+
+					return;
+				}
+
+				Representor<Object> representor = representorOptional.get();
+
 				Set<String> neededProviders = new TreeSet<>();
 
 				Builder builder = new BuilderImpl<>(
 					name, curry(_providerManager::provideMandatory),
 					neededProviders::add,
-					_pathIdentifierMapperManager::mapToIdentifierOrFail);
+					_pathIdentifierMapperManager::mapToIdentifierOrFail,
+					representor::getIdentifier);
 
 				@SuppressWarnings("unchecked")
 				CollectionRoutes collectionRoutes =
@@ -148,5 +164,8 @@ public class CollectionRouterManagerImpl
 
 	@Reference
 	private ProviderManager _providerManager;
+
+	@Reference
+	private RepresentableManager _representableManager;
 
 }

@@ -416,12 +416,12 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		private Form _form;
 		private ThrowableBiFunction<Credentials, U, Boolean>
 			_hasNestedAddingPermissionFunction;
-		private final PathToIdentifierFunction<?> _pathToIdentifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
 		private NestedCreateItemFunction<T, U> _nestedCreateItemFunction;
 		private NestedGetPageFunction<T, U> _nestedGetPageFunction;
 		private final String _nestedName;
+		private final PathToIdentifierFunction<?> _pathToIdentifierFunction;
 		private final ProvideFunction _provideFunction;
 
 	}
