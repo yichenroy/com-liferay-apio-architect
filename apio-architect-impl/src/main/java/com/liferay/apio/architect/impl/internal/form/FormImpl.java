@@ -56,7 +56,7 @@ import static com.liferay.apio.architect.impl.internal.form.FormUtil.getRequired
 import static com.liferay.apio.architect.impl.internal.form.FormUtil.getRequiredString;
 import static com.liferay.apio.architect.impl.internal.form.FormUtil.getRequiredStringList;
 
-import com.liferay.apio.architect.alias.PathToIdentifierFunction;
+import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.form.Form;
@@ -504,8 +504,7 @@ public class FormImpl<T> implements Form<T> {
 	}
 
 	private FormImpl(
-		List<String> paths,
-		PathToIdentifierFunction<?> pathToIdentifierFunction) {
+		List<String> paths, IdentifierFunction<?> pathToIdentifierFunction) {
 
 		_id = String.join("/", paths);
 		_pathToIdentifierFunction = pathToIdentifierFunction;
@@ -539,7 +538,7 @@ public class FormImpl<T> implements Form<T> {
 		_optionalStringLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<String>>> _optionalStrings =
 		new HashMap<>();
-	private final PathToIdentifierFunction<?> _pathToIdentifierFunction;
+	private final IdentifierFunction<?> _pathToIdentifierFunction;
 	private final Map<String, Function<T, Consumer<List<Boolean>>>>
 		_requiredBooleanLists = new HashMap<>();
 	private final Map<String, Function<T, Consumer<Boolean>>>

@@ -19,7 +19,7 @@ import static com.liferay.apio.architect.impl.internal.routes.RoutesBuilderUtil.
 import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
 import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 
-import com.liferay.apio.architect.alias.PathToIdentifierFunction;
+import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.DeleteItemConsumer;
 import com.liferay.apio.architect.alias.routes.GetItemFunction;
@@ -503,7 +503,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		private HasUpdatePermissionFunction<S> _hasUpdatePermissionFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
-		private final PathToIdentifierFunction<?> _pathToIdentifierFunction;
+		private final IdentifierFunction<?> _pathToIdentifierFunction;
 		private final ProvideFunction _provideFunction;
 		private GetItemFunction<T, S> _singleModelFunction;
 		private UpdateItemFunction<T, S> _updateItemFunction;

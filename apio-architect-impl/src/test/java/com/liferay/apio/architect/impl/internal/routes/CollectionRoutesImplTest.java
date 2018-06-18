@@ -513,8 +513,7 @@ public class CollectionRoutesImplTest {
 	private void _testCollectionRoutesCreator(
 		CollectionRoutes<String, Long> collectionRoutes) {
 
-		Optional<Form> formOptional =
-			collectionRoutes.getCreateItemFormOptional();
+		Optional<Form> formOptional = collectionRoutes.getFormOptional();
 
 		if (!formOptional.isPresent()) {
 			throw new AssertionError("Create Form not present");

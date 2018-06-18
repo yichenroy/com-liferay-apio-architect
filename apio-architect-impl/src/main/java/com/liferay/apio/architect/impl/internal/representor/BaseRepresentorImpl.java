@@ -317,16 +317,16 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 	 *
 	 * @param  key the relation's name
 	 * @param  identifierClass the related model identifier's class
-	 * @param  identifierFunction the function used to get the related model's
+	 * @param  modelToIdentifierFunction the function used to get the related model's
 	 *         identifier
 	 * @review
 	 */
 	protected <S> void addRelatedModel(
 		String key, Class<? extends Identifier<S>> identifierClass,
-		Function<T, S> identifierFunction) {
+		Function<T, S> modelToIdentifierFunction) {
 
 		RelatedModel<T, S> relatedModel = new RelatedModelImpl<>(
-			key, identifierClass, identifierFunction);
+			key, identifierClass, modelToIdentifierFunction);
 
 		relatedModels.add(relatedModel);
 	}
@@ -442,10 +442,10 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 			@Override
 			public <W> V addLinkedModel(
 				String key, Class<? extends Identifier<W>> identifierClass,
-				Function<T, W> identifierFunction) {
+				Function<T, W> modelToIdentifierFunction) {
 
 				baseRepresentor.addRelatedModel(
-					key, identifierClass, identifierFunction);
+					key, identifierClass, modelToIdentifierFunction);
 
 				return _this;
 			}

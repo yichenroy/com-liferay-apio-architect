@@ -74,16 +74,6 @@ public interface CollectionRoutes<T, S> {
 		getBatchCreateItemFunctionOptional();
 
 	/**
-	 * Returns the form that is used to create a collection item, if it was
-	 * added through the {@link CollectionRoutes.Builder}. Returns {@code
-	 * Optional#empty()} otherwise.
-	 *
-	 * @return the form used to create a collection item; {@code
-	 *         Optional#empty()} otherwise
-	 */
-	public Optional<Form> getCreateItemFormOptional();
-
-	/**
 	 * Returns the function that is used to create a collection item, if the
 	 * endpoint was added through the {@link CollectionRoutes.Builder} and the
 	 * function therefore exists. Returns {@code Optional#empty()} otherwise.
@@ -92,6 +82,16 @@ public interface CollectionRoutes<T, S> {
 	 *         exists; {@code Optional#empty()} otherwise
 	 */
 	public Optional<CreateItemFunction<T>> getCreateItemFunctionOptional();
+
+	/**
+	 * Returns the form that is used to create a collection item, if it was
+	 * added through the {@link CollectionRoutes.Builder}. Returns {@code
+	 * Optional#empty()} otherwise.
+	 *
+	 * @return the form used to create a collection item; {@code
+	 *         Optional#empty()} otherwise
+	 */
+	public Optional<Form> getFormOptional();
 
 	/**
 	 * Returns the function used to obtain the page, if the endpoint was added

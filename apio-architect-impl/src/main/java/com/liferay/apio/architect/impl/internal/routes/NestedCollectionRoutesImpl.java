@@ -19,7 +19,7 @@ import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 
 import static java.lang.String.join;
 
-import com.liferay.apio.architect.alias.PathToIdentifierFunction;
+import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.NestedCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.NestedGetPageFunction;
@@ -429,7 +429,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		private NestedCreateItemFunction<T, U> _nestedCreateItemFunction;
 		private NestedGetPageFunction<T, U> _nestedGetPageFunction;
 		private final String _nestedName;
-		private final PathToIdentifierFunction<?> _pathToIdentifierFunction;
+		private final IdentifierFunction<?> _pathToIdentifierFunction;
 		private final ProvideFunction _provideFunction;
 
 	}

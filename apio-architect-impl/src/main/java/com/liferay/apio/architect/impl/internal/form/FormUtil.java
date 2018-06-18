@@ -16,7 +16,7 @@ package com.liferay.apio.architect.impl.internal.form;
 
 import static com.liferay.apio.architect.impl.internal.date.DateTransformer.asDate;
 
-import com.liferay.apio.architect.alias.PathToIdentifierFunction;
+import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.file.BinaryFile;
 import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.form.FieldType;
@@ -213,7 +213,7 @@ public class FormUtil {
 	 */
 	public static <T> BiConsumer<String, Function<T, Consumer<?>>>
 		getOptionalLinkedModel(
-			Body body, T t, PathToIdentifierFunction pathToIdentifierFunction) {
+			Body body, T t, IdentifierFunction pathToIdentifierFunction) {
 
 		return (key, function) -> _getLinkedModelValueField(
 			body, key, false, function.apply(t), pathToIdentifierFunction);
@@ -445,7 +445,7 @@ public class FormUtil {
 	 */
 	public static <T> BiConsumer<String, Function<T, Consumer>>
 		getRequiredLinkedModel(
-			Body body, T t, PathToIdentifierFunction pathToIdentifierFunction) {
+			Body body, T t, IdentifierFunction pathToIdentifierFunction) {
 
 		return (key, function) -> _getLinkedModelValueField(
 			body, key, true, function.apply(t), pathToIdentifierFunction);
@@ -624,7 +624,7 @@ public class FormUtil {
 
 	private static void _getLinkedModelValueField(
 		Body body, String key, boolean required, Consumer consumer,
-		PathToIdentifierFunction<?> pathToIdentifierFunction) {
+		IdentifierFunction<?> pathToIdentifierFunction) {
 
 		Optional<String> optional = body.getValueOptional(key);
 

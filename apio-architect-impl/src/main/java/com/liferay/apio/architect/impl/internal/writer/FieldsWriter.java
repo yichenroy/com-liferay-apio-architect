@@ -62,10 +62,10 @@ public class FieldsWriter<T> {
 		RelatedModel<T, S> relatedModel, SingleModel<T> parentSingleModel,
 		SingleModelFunction singleModelFunction) {
 
-		Function<T, S> identifierFunction =
+		Function<T, S> modelToIdentifierFunction =
 			relatedModel.getIdentifierFunction();
 
-		return identifierFunction.andThen(
+		return modelToIdentifierFunction.andThen(
 			s -> singleModelFunction.apply(s, relatedModel.getIdentifierClass())
 		).apply(
 			parentSingleModel.getModel()

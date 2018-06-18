@@ -442,8 +442,7 @@ public class DocumentationWriter {
 				String operationName = resource + "/create";
 
 				Operation createOperation = _getOperation(
-					operationName, collectionRoutes.getCreateItemFormOptional(),
-					POST);
+					operationName, collectionRoutes.getFormOptional(), POST);
 
 				_writeOperation(
 					createOperation, resourceJsonObjectBuilder, resource, type);

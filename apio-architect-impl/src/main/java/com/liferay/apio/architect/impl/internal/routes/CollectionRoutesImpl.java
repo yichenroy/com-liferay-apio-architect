@@ -17,7 +17,7 @@ package com.liferay.apio.architect.impl.internal.routes;
 import static com.liferay.apio.architect.impl.internal.routes.RoutesBuilderUtil.provide;
 import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 
-import com.liferay.apio.architect.alias.PathToIdentifierFunction;
+import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.BatchCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
@@ -77,13 +77,13 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 	}
 
 	@Override
-	public Optional<Form> getCreateItemFormOptional() {
-		return Optional.ofNullable(_creatorForm);
+	public Optional<CreateItemFunction<T>> getCreateItemFunctionOptional() {
+		return Optional.ofNullable(_createItemFunction);
 	}
 
 	@Override
-	public Optional<CreateItemFunction<T>> getCreateItemFunctionOptional() {
-		return Optional.ofNullable(_createItemFunction);
+	public Optional<Form> getFormOptional() {
+		return Optional.ofNullable(_creatorForm);
 	}
 
 	@Override
@@ -97,14 +97,14 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			String name, ProvideFunction provideFunction,
 			Consumer<String> neededProviderConsumer,
 			Function<Path, ?> pathToIdentifierFunction,
-			Function<T, S> identifierFunction) {
+			Function<T, S> modelToIdentifierFunction) {
 
 			_name = name;
 			_provideFunction = provideFunction;
 			_neededProviderConsumer = neededProviderConsumer;
 
 			_pathToIdentifierFunction = pathToIdentifierFunction::apply;
-			_identifierFunction = identifierFunction;
+			_modelToIdentifierFunction = modelToIdentifierFunction;
 		}
 
 		@Override
@@ -540,7 +540,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			for (R r : formList) {
 				S s = transformThrowableFunction.andThen(
-					_identifierFunction::apply
+					_modelToIdentifierFunction::apply
 				).apply(
 					r
 				);
@@ -577,10 +577,10 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		private Form _creatorForm;
 		private GetPageFunction<T> _getPageFunction;
 		private HasAddingPermissionFunction _hasAddingPermissionFunction;
-		private final Function<T, S> _identifierFunction;
+		private final Function<T, S> _modelToIdentifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
-		private final PathToIdentifierFunction<?> _pathToIdentifierFunction;
+		private final IdentifierFunction<?> _pathToIdentifierFunction;
 		private final ProvideFunction _provideFunction;
 
 	}
