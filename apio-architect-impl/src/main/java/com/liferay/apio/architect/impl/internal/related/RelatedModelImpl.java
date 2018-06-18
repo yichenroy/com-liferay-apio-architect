@@ -55,6 +55,11 @@ public class RelatedModelImpl<T, S> implements RelatedModel<T, S> {
 		return _key;
 	}
 
+	@Override
+	public Function<T, S> getModelToIdentifierFunction() {
+		return _modelToIdentifierFunction;
+	}
+
 	private final Class<? extends Identifier<S>> _identifierClass;
 	private final String _key;
 	private final Function<T, S> _modelToIdentifierFunction;

@@ -63,7 +63,7 @@ public class FieldsWriter<T> {
 		SingleModelFunction singleModelFunction) {
 
 		Function<T, S> modelToIdentifierFunction =
-			relatedModel.getIdentifierFunction();
+			relatedModel.getModelToIdentifierFunction();
 
 		return modelToIdentifierFunction.andThen(
 			s -> singleModelFunction.apply(s, relatedModel.getIdentifierClass())

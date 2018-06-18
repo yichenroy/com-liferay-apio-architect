@@ -44,8 +44,11 @@ public interface RelatedModel<T, S> {
 	 * Returns the function you can use to retrieve the related resource's
 	 * identifier.
 	 *
-	 * @return the function that calculates the related resource's identifier.
+	 * @return the function that calculates the related resource's identifier
+	 * @deprecated As of 1.0.0, replaced by {@link #getModelToIdentifierFunction()}
+	 * @review
 	 */
+	@Deprecated
 	public Function<T, S> getIdentifierFunction();
 
 	/**
@@ -54,5 +57,13 @@ public interface RelatedModel<T, S> {
 	 * @return the relation's key
 	 */
 	public String getKey();
+
+	/**
+	 * Returns the function you can use to retrieve the related resource's
+	 * identifier.
+	 *
+	 * @return the function that calculates the related resource's identifier
+	 */
+	public Function<T, S> getModelToIdentifierFunction();
 
 }
