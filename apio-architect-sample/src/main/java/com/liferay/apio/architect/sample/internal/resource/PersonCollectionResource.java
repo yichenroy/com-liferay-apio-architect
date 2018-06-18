@@ -31,6 +31,8 @@ import com.liferay.apio.architect.sample.internal.model.PostalAddressModel;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
@@ -55,7 +57,7 @@ public class PersonCollectionResource
 		return builder.addGetter(
 			this::_getPageItems
 		).addCreator(
-			this::_addPerson, Credentials.class,
+			this::_addPerson, this::_addPersons, Credentials.class,
 			PermissionChecker::hasPermission, PersonForm::buildForm
 		).build();
 	}
@@ -128,11 +130,33 @@ public class PersonCollectionResource
 			throw new ForbiddenException();
 		}
 
+		return _addPersonModel(personForm);
+	}
+
+	private PersonModel _addPersonModel(PersonForm personForm) {
 		return PersonModel.create(
 			personForm.getPostalAddressModel(), personForm.getImage(),
 			personForm.getBirthDate(), personForm.getEmail(),
 			personForm.getGivenName(), personForm.getJobTitles(),
 			personForm.getFamilyName());
+	}
+
+	private List<Long> _addPersons(
+		List<PersonForm> formList, Credentials credentials) {
+
+		if (!hasPermission(credentials)) {
+			throw new ForbiddenException();
+		}
+
+		Stream<PersonForm> stream = formList.stream();
+
+		return stream.map(
+			this::_addPersonModel
+		).map(
+			PersonModel::getId
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	private void _deletePerson(long id, Credentials credentials) {
