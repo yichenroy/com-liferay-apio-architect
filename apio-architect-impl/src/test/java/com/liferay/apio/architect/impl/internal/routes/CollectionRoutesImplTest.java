@@ -464,8 +464,7 @@ public class CollectionRoutesImplTest {
 	private void _testCollectionRoutesBatchCreator(
 		CollectionRoutes<String, Long> collectionRoutes) {
 
-		Optional<Form> formOptional =
-			collectionRoutes.getBatchCreateItemFormOptional();
+		Optional<Form> formOptional = collectionRoutes.getFormOptional();
 
 		if (!formOptional.isPresent()) {
 			throw new AssertionError("Batch Create Form not present");

@@ -58,15 +58,9 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 	public CollectionRoutesImpl(BuilderImpl<T, S> builderImpl) {
 		_batchCreateItemFunction = builderImpl._batchCreateItemFunction;
-		_batchCreatorForm = builderImpl._batchCreatorForm;
 		_createItemFunction = builderImpl._createItemFunction;
-		_creatorForm = builderImpl._creatorForm;
+		_form = builderImpl._form;
 		_getPageFunction = builderImpl._getPageFunction;
-	}
-
-	@Override
-	public Optional<Form> getBatchCreateItemFormOptional() {
-		return Optional.ofNullable(_batchCreatorForm);
 	}
 
 	@Override
@@ -83,7 +77,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 	@Override
 	public Optional<Form> getFormOptional() {
-		return Optional.ofNullable(_creatorForm);
+		return Optional.ofNullable(_form);
 	}
 
 	@Override
@@ -140,9 +134,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name), _pathToIdentifierFunction));
 
-			_batchCreatorForm = form;
-
-			_creatorForm = form;
+			_form = form;
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass,
@@ -192,9 +184,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name), _pathToIdentifierFunction));
 
-			_creatorForm = form;
-
-			_batchCreatorForm = form;
+			_form = form;
 
 			_createItemFunction = httpServletRequest -> body ->
 				Try.fromFallible(
@@ -258,9 +248,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name), _pathToIdentifierFunction));
 
-			_creatorForm = form;
-
-			_batchCreatorForm = form;
+			_form = form;
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
@@ -322,9 +310,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name), _pathToIdentifierFunction));
 
-			_creatorForm = form;
-
-			_batchCreatorForm = form;
+			_form = form;
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
@@ -385,9 +371,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				new FormImpl.BuilderImpl<>(
 					Arrays.asList("c", _name), _pathToIdentifierFunction));
 
-			_creatorForm = form;
-
-			_batchCreatorForm = form;
+			_form = form;
 
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
@@ -553,7 +537,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 		private List<Operation> _getOperations(Credentials credentials) {
 			return Optional.ofNullable(
-				_creatorForm
+				_form
 			).filter(
 				__ -> Try.fromFallible(
 					() -> _hasAddingPermissionFunction.apply(credentials)
@@ -572,9 +556,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		}
 
 		private BatchCreateItemFunction<S> _batchCreateItemFunction;
-		private Form _batchCreatorForm;
 		private CreateItemFunction<T> _createItemFunction;
-		private Form _creatorForm;
+		private Form _form;
 		private GetPageFunction<T> _getPageFunction;
 		private HasAddingPermissionFunction _hasAddingPermissionFunction;
 		private final Function<T, S> _modelToIdentifierFunction;
@@ -586,9 +569,8 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 	}
 
 	private final BatchCreateItemFunction<S> _batchCreateItemFunction;
-	private final Form _batchCreatorForm;
 	private final CreateItemFunction<T> _createItemFunction;
-	private final Form _creatorForm;
+	private final Form _form;
 	private final GetPageFunction<T> _getPageFunction;
 
 }

@@ -53,16 +53,6 @@ import java.util.Optional;
 public interface CollectionRoutes<T, S> {
 
 	/**
-	 * Returns the form that is used to create multiple collection items, if it
-	 * was added through the {@link Builder}. Returns {@code Optional#empty()}
-	 * otherwise.
-	 *
-	 * @return the form used to create a collection item; {@code
-	 *         Optional#empty()} otherwise
-	 */
-	public Optional<Form> getBatchCreateItemFormOptional();
-
-	/**
 	 * Returns the function that is used to create multiple collection items, if
 	 * the endpoint was added through the {@link Builder} and the function
 	 * therefore exists. Returns {@code Optional#empty()} otherwise.
