@@ -114,21 +114,9 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			FormBuilderFunction<R> formBuilderFunction) {
 
 			ThrowableBiFunction<List<R>, A, List<S>>
-				batchCreatorThrowableBiFunction = (formList, a) -> {
-					List<S> list = new ArrayList<>();
-
-					for (R r : formList) {
-						S s = throwableBiFunction.andThen(
-							_identifierFunction::apply
-						).apply(
-							r, a
-						);
-
-						list.add(s);
-					}
-
-					return list;
-				};
+				batchCreatorThrowableBiFunction = (formList, a) ->
+					_getIdentifierList(
+						formList, r -> throwableBiFunction.apply(r, a));
 
 			return addCreator(
 				throwableBiFunction, batchCreatorThrowableBiFunction, aClass,
@@ -181,6 +169,21 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			HasAddingPermissionFunction hasAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
+			ThrowableFunction<List<R>, List<S>> batchCreatorThrowableFunction =
+				formList -> _getIdentifierList(formList, throwableFunction);
+
+			return addCreator(
+				throwableFunction, batchCreatorThrowableFunction,
+				hasAddingPermissionFunction, formBuilderFunction);
+		}
+
+		@Override
+		public <R> Builder<T, S> addCreator(
+			ThrowableFunction<R, T> creatorThrowableFunction,
+			ThrowableFunction<List<R>, List<S>> batchCreatorThrowableFunction,
+			HasAddingPermissionFunction hasAddingPermissionFunction,
+			FormBuilderFunction<R> formBuilderFunction) {
+
 			_hasAddingPermissionFunction = hasAddingPermissionFunction;
 
 			Form<R> form = formBuilderFunction.apply(
@@ -189,13 +192,23 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			_creatorForm = form;
 
+			_batchCreatorForm = form;
+
 			_createItemFunction = httpServletRequest -> body ->
 				Try.fromFallible(
-					() -> throwableFunction.andThen(
+					() -> creatorThrowableFunction.andThen(
 						t -> new SingleModelImpl<>(
 							t, _name, Collections.emptyList())
 					).apply(
 						form.get(body)
+					));
+
+			_batchCreateItemFunction = httpServletRequest -> body ->
+				Try.fromFallible(
+					() -> batchCreatorThrowableFunction.andThen(
+						t -> new BatchResult<>(t, _name)
+					).apply(
+						form.getList(body)
 					));
 
 			return this;
@@ -205,6 +218,28 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		public <A, B, C, D, R> Builder<T, S> addCreator(
 			ThrowablePentaFunction<R, A, B, C, D, T> throwablePentaFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			HasAddingPermissionFunction hasAddingPermissionFunction,
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			ThrowablePentaFunction<List<R>, A, B, C, D, List<S>>
+				batchCreatorThrowablePentaFunction = (formList, a, b, c, d) ->
+					_getIdentifierList(
+						formList,
+						r -> throwablePentaFunction.apply(r, a, b, c, d));
+
+			return addCreator(
+				throwablePentaFunction, batchCreatorThrowablePentaFunction,
+				aClass, bClass, cClass, dClass, hasAddingPermissionFunction,
+				formBuilderFunction);
+		}
+
+		@Override
+		public <A, B, C, D, R> Builder<T, S> addCreator(
+			ThrowablePentaFunction<R, A, B, C, D, T>
+				creatorThrowablePentaFunction,
+			ThrowablePentaFunction<List<R>, A, B, C, D, List<S>>
+				batchCreatorThrowablePentaFunction, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
@@ -221,14 +256,25 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			_creatorForm = form;
 
+			_batchCreatorForm = form;
+
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass, dClass,
-				(a, b, c, d) -> throwablePentaFunction.andThen(
+				(a, b, c, d) -> creatorThrowablePentaFunction.andThen(
 					t -> new SingleModelImpl<>(
 						t, _name, Collections.emptyList())
 				).apply(
 					form.get(body), a, b, c, d
+				));
+
+			_batchCreateItemFunction = httpServletRequest -> body -> provide(
+				_provideFunction.apply(httpServletRequest), aClass, bClass,
+				cClass, dClass,
+				(a, b, c, d) -> batchCreatorThrowablePentaFunction.andThen(
+					t -> new BatchResult<>(t, _name)
+				).apply(
+					form.getList(body), a, b, c, d
 				));
 
 			return this;
@@ -238,6 +284,27 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		public <A, B, C, R> Builder<T, S> addCreator(
 			ThrowableTetraFunction<R, A, B, C, T> throwableTetraFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass,
+			HasAddingPermissionFunction hasAddingPermissionFunction,
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			ThrowableTetraFunction<List<R>, A, B, C, List<S>>
+				batchCreatorThrowableTetraFunction = (formList, a, b, c) ->
+					_getIdentifierList(
+						formList,
+						r -> throwableTetraFunction.apply(r, a, b, c));
+
+			return addCreator(
+				throwableTetraFunction, batchCreatorThrowableTetraFunction,
+				aClass, bClass, cClass, hasAddingPermissionFunction,
+				formBuilderFunction);
+		}
+
+		@Override
+		public <A, B, C, R> Builder<T, S> addCreator(
+			ThrowableTetraFunction<R, A, B, C, T> creatorThrowableTetraFunction,
+			ThrowableTetraFunction<List<R>, A, B, C, List<S>>
+				batchCreatorThrowableTetraFunction, Class<A> aClass,
+			Class<B> bClass, Class<C> cClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
@@ -253,14 +320,25 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			_creatorForm = form;
 
+			_batchCreatorForm = form;
+
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
 				cClass,
-				(a, b, c) -> throwableTetraFunction.andThen(
+				(a, b, c) -> creatorThrowableTetraFunction.andThen(
 					t -> new SingleModelImpl<>(
 						t, _name, Collections.emptyList())
 				).apply(
 					form.get(body), a, b, c
+				));
+
+			_batchCreateItemFunction = httpServletRequest -> body -> provide(
+				_provideFunction.apply(httpServletRequest), aClass, bClass,
+				cClass,
+				(a, b, c) -> batchCreatorThrowableTetraFunction.andThen(
+					t -> new BatchResult<>(t, _name)
+				).apply(
+					form.getList(body), a, b, c
 				));
 
 			return this;
@@ -270,6 +348,25 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		public <A, B, R> Builder<T, S> addCreator(
 			ThrowableTriFunction<R, A, B, T> throwableTriFunction,
 			Class<A> aClass, Class<B> bClass,
+			HasAddingPermissionFunction hasAddingPermissionFunction,
+			FormBuilderFunction<R> formBuilderFunction) {
+
+			ThrowableTriFunction<List<R>, A, B, List<S>>
+				batchCreatorThrowableTriFunction = (formList, a, b) ->
+					_getIdentifierList(
+						formList, r -> throwableTriFunction.apply(r, a, b));
+
+			return addCreator(
+				throwableTriFunction, batchCreatorThrowableTriFunction, aClass,
+				bClass, hasAddingPermissionFunction, formBuilderFunction);
+		}
+
+		@Override
+		public <A, B, R> Builder<T, S> addCreator(
+			ThrowableTriFunction<R, A, B, T> creatorThrowableTriFunction,
+			ThrowableTriFunction<List<R>, A, B, List<S>>
+				batchCreatorThrowableTriFunction, Class<A> aClass,
+			Class<B> bClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction) {
 
@@ -284,13 +381,23 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			_creatorForm = form;
 
+			_batchCreatorForm = form;
+
 			_createItemFunction = httpServletRequest -> body -> provide(
 				_provideFunction.apply(httpServletRequest), aClass, bClass,
-				(a, b) -> throwableTriFunction.andThen(
+				(a, b) -> creatorThrowableTriFunction.andThen(
 					t -> new SingleModelImpl<>(
 						t, _name, Collections.emptyList())
 				).apply(
 					form.get(body), a, b
+				));
+
+			_batchCreateItemFunction = httpServletRequest -> body -> provide(
+				_provideFunction.apply(httpServletRequest), aClass, bClass,
+				(a, b) -> batchCreatorThrowableTriFunction.andThen(
+					t -> new BatchResult<>(t, _name)
+				).apply(
+					form.getList(body), a, b
 				));
 
 			return this;
@@ -411,6 +518,26 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		@Override
 		public CollectionRoutes<T, S> build() {
 			return new CollectionRoutesImpl<>(this);
+		}
+
+		private <R> List<S> _getIdentifierList(
+				List<R> formList,
+				ThrowableFunction<R, T> transformThrowableFunction)
+			throws Exception {
+
+			List<S> list = new ArrayList<>();
+
+			for (R r : formList) {
+				S s = transformThrowableFunction.andThen(
+					_identifierFunction::apply
+				).apply(
+					r
+				);
+
+				list.add(s);
+			}
+
+			return list;
 		}
 
 		private List<Operation> _getOperations(Credentials credentials) {

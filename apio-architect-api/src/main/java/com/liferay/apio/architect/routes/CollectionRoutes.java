@@ -162,6 +162,23 @@ public interface CollectionRoutes<T, S> {
 			FormBuilderFunction<R> formBuilderFunction);
 
 		/**
+		 * Adds a route to a creator function that has no extra parameters.
+		 *
+		 * @param  creatorThrowableFunction the creator function
+		 * @param  batchCreatorThrowableFunction the batch creator function
+		 * @param  hasAddingPermissionFunction the permission function for this
+		 *         route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
+		 * @return the updated builder
+		 */
+		public <R> Builder<T, S> addCreator(
+			ThrowableFunction<R, T> creatorThrowableFunction,
+			ThrowableFunction<List<R>, List<S>> batchCreatorThrowableFunction,
+			HasAddingPermissionFunction hasAddingPermissionFunction,
+			FormBuilderFunction<R> formBuilderFunction);
+
+		/**
 		 * Adds a route to a creator function that has four extra parameters.
 		 *
 		 * @param  throwablePentaFunction the creator function
@@ -177,6 +194,30 @@ public interface CollectionRoutes<T, S> {
 		 */
 		public <A, B, C, D, R> Builder<T, S> addCreator(
 			ThrowablePentaFunction<R, A, B, C, D, T> throwablePentaFunction,
+			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
+			HasAddingPermissionFunction hasAddingPermissionFunction,
+			FormBuilderFunction<R> formBuilderFunction);
+
+		/**
+		 * Adds a route to a creator function that has four extra parameters.
+		 *
+		 * @param  creatorThrowablePentaFunction the creator function
+		 * @param  batchCreatorThrowablePentaFunction the batch creator function
+		 * @param  aClass the class of the creator function's second parameter
+		 * @param  bClass the class of the creator function's third parameter
+		 * @param  cClass the class of the creator function's fourth parameter
+		 * @param  dClass the class of the creator function's fifth parameter
+		 * @param  hasAddingPermissionFunction the permission function for this
+		 *         route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
+		 * @return the updated builder
+		 */
+		public <A, B, C, D, R> Builder<T, S> addCreator(
+			ThrowablePentaFunction<R, A, B, C, D, T>
+				creatorThrowablePentaFunction,
+			ThrowablePentaFunction<List<R>, A, B, C, D, List<S>>
+				batchCreatorThrowablePentaFunction,
 			Class<A> aClass, Class<B> bClass, Class<C> cClass, Class<D> dClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction);
@@ -201,6 +242,28 @@ public interface CollectionRoutes<T, S> {
 			FormBuilderFunction<R> formBuilderFunction);
 
 		/**
+		 * Adds a route to a creator function that has three extra parameters.
+		 *
+		 * @param  creatorThrowableTetraFunction the creator function
+		 * @param  batchCreatorThrowableTetraFunction the batch creator function
+		 * @param  aClass the class of the creator function's second parameter
+		 * @param  bClass the class of the creator function's third parameter
+		 * @param  cClass the class of the creator function's fourth parameter
+		 * @param  hasAddingPermissionFunction the permission function for this
+		 *         route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
+		 * @return the updated builder
+		 */
+		public <A, B, C, R> Builder<T, S> addCreator(
+			ThrowableTetraFunction<R, A, B, C, T> creatorThrowableTetraFunction,
+			ThrowableTetraFunction<List<R>, A, B, C, List<S>>
+				batchCreatorThrowableTetraFunction,
+			Class<A> aClass, Class<B> bClass, Class<C> cClass,
+			HasAddingPermissionFunction hasAddingPermissionFunction,
+			FormBuilderFunction<R> formBuilderFunction);
+
+		/**
 		 * Adds a route to a creator function that has two extra parameters.
 		 *
 		 * @param  throwableTriFunction the creator function
@@ -214,6 +277,27 @@ public interface CollectionRoutes<T, S> {
 		 */
 		public <A, B, R> Builder<T, S> addCreator(
 			ThrowableTriFunction<R, A, B, T> throwableTriFunction,
+			Class<A> aClass, Class<B> bClass,
+			HasAddingPermissionFunction hasAddingPermissionFunction,
+			FormBuilderFunction<R> formBuilderFunction);
+
+		/**
+		 * Adds a route to a creator function that has two extra parameters.
+		 *
+		 * @param  creatorThrowableTriFunction the creator function
+		 * @param  batchCreatorThrowableTriFunction the batch creator function
+		 * @param  aClass the class of the creator function's second parameter
+		 * @param  bClass the class of the creator function's third parameter
+		 * @param  hasAddingPermissionFunction the permission function for this
+		 *         route
+		 * @param  formBuilderFunction the function that creates the form for
+		 *         this operation
+		 * @return the updated builder
+		 */
+		public <A, B, R> Builder<T, S> addCreator(
+			ThrowableTriFunction<R, A, B, T> creatorThrowableTriFunction,
+			ThrowableTriFunction<List<R>, A, B, List<S>>
+				batchCreatorThrowableTriFunction,
 			Class<A> aClass, Class<B> bClass,
 			HasAddingPermissionFunction hasAddingPermissionFunction,
 			FormBuilderFunction<R> formBuilderFunction);

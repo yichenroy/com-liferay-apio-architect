@@ -16,8 +16,10 @@ package com.liferay.apio.architect.impl.internal.routes;
 
 import static com.liferay.apio.architect.impl.internal.routes.RoutesTestUtil.FORM_BUILDER_FUNCTION;
 import static com.liferay.apio.architect.impl.internal.routes.RoutesTestUtil.HAS_ADDING_PERMISSION_FUNCTION;
+import static com.liferay.apio.architect.impl.internal.routes.RoutesTestUtil.IDENTIFIER_FUNCTION;
 import static com.liferay.apio.architect.impl.internal.routes.RoutesTestUtil.PAGINATION;
 import static com.liferay.apio.architect.impl.internal.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
+import static com.liferay.apio.architect.impl.internal.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 
 import static com.spotify.hamcrest.optional.OptionalMatchers.emptyOptional;
@@ -29,9 +31,13 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 
+import com.liferay.apio.architect.alias.routes.BatchCreateItemFunction;
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
 import com.liferay.apio.architect.alias.routes.GetPageFunction;
+import com.liferay.apio.architect.batch.BatchResult;
 import com.liferay.apio.architect.form.Body;
+import com.liferay.apio.architect.form.Form;
+import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.impl.internal.routes.CollectionRoutesImpl.BuilderImpl;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
@@ -41,6 +47,7 @@ import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.CollectionRoutes.Builder;
 import com.liferay.apio.architect.single.model.SingleModel;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -57,13 +64,13 @@ public class CollectionRoutesImplTest {
 
 	@Test
 	public void testEmptyBuilderBuildsEmptyRoutes() {
-		Builder<String, ?> builder = new BuilderImpl<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
-			__ -> null, __ -> null);
+			__ -> null, IDENTIFIER_FUNCTION);
 
-		CollectionRoutes<String, ?> collectionRoutes = builder.build();
+		CollectionRoutes<String, Long> collectionRoutes = builder.build();
 
 		Optional<CreateItemFunction<String>> createItemFunctionOptional =
 			collectionRoutes.getCreateItemFunctionOptional();
@@ -77,14 +84,39 @@ public class CollectionRoutesImplTest {
 	}
 
 	@Test
+	public void testFiveParameterBatchCreatorCreatesValidRoutes() {
+		Set<String> neededProviders = new TreeSet<>();
+
+		Builder<String, Long> builder = new BuilderImpl<>(
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
+			IDENTIFIER_FUNCTION);
+
+		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
+			this::_testAndReturnFourParameterCreatorRoute,
+			this::_testAndReturnFourParameterBatchCreatorRoute, String.class,
+			Long.class, Boolean.class, Integer.class,
+			HAS_ADDING_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
+		).build();
+
+		assertThat(
+			neededProviders,
+			contains(
+				Boolean.class.getName(), Integer.class.getName(),
+				Long.class.getName(), String.class.getName()));
+
+		_testCollectionRoutesCreator(collectionRoutes);
+		_testCollectionRoutesBatchCreator(collectionRoutes);
+	}
+
+	@Test
 	public void testFiveParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, ?> builder = new BuilderImpl<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			__ -> null);
+			IDENTIFIER_FUNCTION);
 
-		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
+		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnFourParameterCreatorRoute, String.class,
 			Long.class, Boolean.class, Integer.class,
 			HAS_ADDING_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
@@ -103,14 +135,39 @@ public class CollectionRoutesImplTest {
 	}
 
 	@Test
+	public void testFourParameterBatchCreatorCreatesValidRoutes() {
+		Set<String> neededProviders = new TreeSet<>();
+
+		Builder<String, Long> builder = new BuilderImpl<>(
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
+			IDENTIFIER_FUNCTION);
+
+		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
+			this::_testAndReturnThreeParameterCreatorRoute,
+			this::_testAndReturnThreeParameterBatchCreatorRoute, String.class,
+			Long.class, Boolean.class, HAS_ADDING_PERMISSION_FUNCTION,
+			FORM_BUILDER_FUNCTION
+		).build();
+
+		assertThat(
+			neededProviders,
+			contains(
+				Boolean.class.getName(), Long.class.getName(),
+				String.class.getName()));
+
+		_testCollectionRoutesCreator(collectionRoutes);
+		_testCollectionRoutesBatchCreator(collectionRoutes);
+	}
+
+	@Test
 	public void testFourParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, ?> builder = new BuilderImpl<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			__ -> null);
+			IDENTIFIER_FUNCTION);
 
-		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
+		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnThreeParameterCreatorRoute, String.class,
 			Long.class, Boolean.class, HAS_ADDING_PERMISSION_FUNCTION,
 			FORM_BUILDER_FUNCTION
@@ -129,14 +186,34 @@ public class CollectionRoutesImplTest {
 	}
 
 	@Test
+	public void testOneParameterBatchCreatorCreatesValidRoutes() {
+		Set<String> neededProviders = new TreeSet<>();
+
+		Builder<String, Long> builder = new BuilderImpl<>(
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
+			IDENTIFIER_FUNCTION);
+
+		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
+			this::_testAndReturnNoParameterCreatorRoute,
+			this::_testAndReturnNoParameterBatchCreatorRoute,
+			HAS_ADDING_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
+		).build();
+
+		assertThat(neededProviders.size(), is(0));
+
+		_testCollectionRoutesCreator(collectionRoutes);
+		_testCollectionRoutesBatchCreator(collectionRoutes);
+	}
+
+	@Test
 	public void testOneParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, ?> builder = new BuilderImpl<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			__ -> null);
+			IDENTIFIER_FUNCTION);
 
-		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
+		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnNoParameterCreatorRoute,
 			HAS_ADDING_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).addGetter(
@@ -149,14 +226,36 @@ public class CollectionRoutesImplTest {
 	}
 
 	@Test
+	public void testThreeParameterBatchCreatorCreatesValidRoutes() {
+		Set<String> neededProviders = new TreeSet<>();
+
+		Builder<String, Long> builder = new BuilderImpl<>(
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
+			IDENTIFIER_FUNCTION);
+
+		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
+			this::_testAndReturnTwoParameterCreatorRoute,
+			this::_testAndReturnTwoParameterBatchCreatorRoute, String.class,
+			Long.class, HAS_ADDING_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
+		).build();
+
+		assertThat(
+			neededProviders,
+			contains(Long.class.getName(), String.class.getName()));
+
+		_testCollectionRoutesCreator(collectionRoutes);
+		_testCollectionRoutesBatchCreator(collectionRoutes);
+	}
+
+	@Test
 	public void testThreeParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, ?> builder = new BuilderImpl<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			__ -> null);
+			IDENTIFIER_FUNCTION);
 
-		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
+		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnTwoParameterCreatorRoute, String.class,
 			Long.class, HAS_ADDING_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).addGetter(
@@ -172,14 +271,34 @@ public class CollectionRoutesImplTest {
 	}
 
 	@Test
+	public void testTwoParameterBatchCreatorCreatesValidRoutes() {
+		Set<String> neededProviders = new TreeSet<>();
+
+		Builder<String, Long> builder = new BuilderImpl<>(
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
+			IDENTIFIER_FUNCTION);
+
+		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
+			this::_testAndReturnOneParameterCreatorRoute,
+			this::_testAndReturnOneParameterBatchCreatorRoute, String.class,
+			HAS_ADDING_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
+		).build();
+
+		assertThat(neededProviders, contains(String.class.getName()));
+
+		_testCollectionRoutesCreator(collectionRoutes);
+		_testCollectionRoutesBatchCreator(collectionRoutes);
+	}
+
+	@Test
 	public void testTwoParameterBuilderMethodsCreatesValidRoutes() {
 		Set<String> neededProviders = new TreeSet<>();
 
-		Builder<String, ?> builder = new BuilderImpl<>(
+		Builder<String, Long> builder = new BuilderImpl<>(
 			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
-			__ -> null);
+			IDENTIFIER_FUNCTION);
 
-		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
+		CollectionRoutes<String, Long> collectionRoutes = builder.addCreator(
 			this::_testAndReturnOneParameterCreatorRoute, String.class,
 			HAS_ADDING_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
 		).addGetter(
@@ -189,6 +308,26 @@ public class CollectionRoutesImplTest {
 		assertThat(neededProviders, contains(String.class.getName()));
 
 		_testCollectionRoutes(collectionRoutes);
+	}
+
+	private String _getBodyValue() {
+		Optional<String> optional = _singleBody.getValueOptional("key");
+
+		if (!optional.isPresent()) {
+			throw new AssertionError("Body does not contain field: \"key\"");
+		}
+
+		return optional.get();
+	}
+
+	private List<Long> _testAndReturnFourParameterBatchCreatorRoute(
+		List<Map<String, Object>> bodies, String string, Long aLong,
+		Boolean aBoolean, Integer integer) {
+
+		assertThat(integer, is(2017));
+
+		return _testAndReturnThreeParameterBatchCreatorRoute(
+			bodies, string, aLong, aBoolean);
 	}
 
 	private String _testAndReturnFourParameterCreatorRoute(
@@ -211,12 +350,21 @@ public class CollectionRoutesImplTest {
 			pagination, string, aLong, aBoolean);
 	}
 
+	private List<Long> _testAndReturnNoParameterBatchCreatorRoute(
+		List<Map<String, Object>> bodies) {
+
+		assertThat(bodies, hasSize(2));
+
+		assertThat(bodies.get(0).get("key"), is(_getBodyValue()));
+		assertThat(bodies.get(1).get("key"), is(_getBodyValue()));
+
+		return Arrays.asList(42L, 42L);
+	}
+
 	private String _testAndReturnNoParameterCreatorRoute(
 		Map<String, Object> body) {
 
-		Optional<String> optional = _body.getValueOptional("key");
-
-		assertThat(body.get("key"), is(optional.get()));
+		assertThat(body.get("key"), is(_getBodyValue()));
 
 		return "Apio";
 	}
@@ -227,6 +375,14 @@ public class CollectionRoutesImplTest {
 		assertThat(pagination, is(PAGINATION));
 
 		return new PageItems<>(Collections.singletonList("Apio"), 1);
+	}
+
+	private List<Long> _testAndReturnOneParameterBatchCreatorRoute(
+		List<Map<String, Object>> bodies, String string) {
+
+		assertThat(string, is("Apio"));
+
+		return _testAndReturnNoParameterBatchCreatorRoute(bodies);
 	}
 
 	private String _testAndReturnOneParameterCreatorRoute(
@@ -245,6 +401,16 @@ public class CollectionRoutesImplTest {
 		return _testAndReturnNoParameterGetterRoute(pagination);
 	}
 
+	private List<Long> _testAndReturnThreeParameterBatchCreatorRoute(
+		List<Map<String, Object>> bodies, String string, Long aLong,
+		Boolean aBoolean) {
+
+		assertThat(aBoolean, is(true));
+
+		return _testAndReturnTwoParameterBatchCreatorRoute(
+			bodies, string, aLong);
+	}
+
 	private String _testAndReturnThreeParameterCreatorRoute(
 		Map<String, Object> body, String string, Long aLong, Boolean aBoolean) {
 
@@ -259,6 +425,14 @@ public class CollectionRoutesImplTest {
 		assertThat(aBoolean, is(true));
 
 		return _testAndReturnTwoParameterGetterRoute(pagination, string, aLong);
+	}
+
+	private List<Long> _testAndReturnTwoParameterBatchCreatorRoute(
+		List<Map<String, Object>> bodies, String string, Long aLong) {
+
+		assertThat(aLong, is(42L));
+
+		return _testAndReturnOneParameterBatchCreatorRoute(bodies, string);
 	}
 
 	private String _testAndReturnTwoParameterCreatorRoute(
@@ -278,43 +452,121 @@ public class CollectionRoutesImplTest {
 	}
 
 	private void _testCollectionRoutes(
-		CollectionRoutes<String, ?> collectionRoutes) {
+		CollectionRoutes<String, Long> collectionRoutes) {
 
-		Optional<CollectionRoutes<String, ?>> optional = Optional.of(
-			collectionRoutes);
+		_testCollectionRoutesCreator(collectionRoutes);
 
-		Map map = optional.flatMap(
-			CollectionRoutes::getCreateItemFormOptional
-		).map(
-			form -> {
-				assertThat(form.getId(), is("c/name"));
+		_testCollectionRoutesBatchCreator(collectionRoutes);
 
-				return (Map)form.get(_body);
-			}
-		).get();
+		_testCollectionRoutesGetter(collectionRoutes);
+	}
 
-		Optional<String> valueOptional = _body.getValueOptional("key");
+	private void _testCollectionRoutesBatchCreator(
+		CollectionRoutes<String, Long> collectionRoutes) {
 
-		assertThat(map.get("key"), is(valueOptional.get()));
+		Optional<Form> formOptional =
+			collectionRoutes.getBatchCreateItemFormOptional();
 
-		SingleModel<String> singleModel = optional.flatMap(
-			CollectionRoutes::getCreateItemFunctionOptional
-		).get(
-		).apply(
+		if (!formOptional.isPresent()) {
+			throw new AssertionError("Batch Create Form not present");
+		}
+
+		Form form = formOptional.get();
+
+		assertThat(form.getId(), is("c/name"));
+
+		List<Map> list = unsafeCast(form.getList(_batchBody));
+
+		assertThat(list, hasSize(2));
+
+		assertThat(list.get(0).get("key"), is(_getBodyValue()));
+		assertThat(list.get(1).get("key"), is(_getBodyValue()));
+
+		Optional<BatchCreateItemFunction<Long>>
+			batchCreateItemFunctionOptional =
+				collectionRoutes.getBatchCreateItemFunctionOptional();
+
+		if (!batchCreateItemFunctionOptional.isPresent()) {
+			throw new AssertionError("BatchCreateItemFunction not present");
+		}
+
+		BatchCreateItemFunction<Long> batchCreateItemFunction =
+			batchCreateItemFunctionOptional.get();
+
+		BatchResult<Long> batchResult = batchCreateItemFunction.apply(
 			null
+		).andThen(
+			Try::getUnchecked
 		).apply(
-			_body
-		).getUnchecked();
+			_batchBody
+		);
+
+		assertThat(batchResult.resourceName, is("name"));
+
+		List<Long> identifiers = batchResult.getIdentifiers();
+
+		assertThat(identifiers, hasSize(2));
+		assertThat(identifiers.get(0), is(42L));
+		assertThat(identifiers.get(1), is(42L));
+	}
+
+	private void _testCollectionRoutesCreator(
+		CollectionRoutes<String, Long> collectionRoutes) {
+
+		Optional<Form> formOptional =
+			collectionRoutes.getCreateItemFormOptional();
+
+		if (!formOptional.isPresent()) {
+			throw new AssertionError("Create Form not present");
+		}
+
+		Form form = formOptional.get();
+
+		assertThat(form.getId(), is("c/name"));
+
+		Map map = (Map)form.get(_singleBody);
+
+		assertThat(map.get("key"), is(_getBodyValue()));
+
+		Optional<CreateItemFunction<String>> createItemFunctionOptional =
+			collectionRoutes.getCreateItemFunctionOptional();
+
+		if (!createItemFunctionOptional.isPresent()) {
+			throw new AssertionError("CreateItemFunction not present");
+		}
+
+		CreateItemFunction<String> createItemFunction =
+			createItemFunctionOptional.get();
+
+		SingleModel<String> singleModel = createItemFunction.apply(
+			null
+		).andThen(
+			Try::getUnchecked
+		).apply(
+			_singleBody
+		);
 
 		assertThat(singleModel.getResourceName(), is("name"));
 		assertThat(singleModel.getModel(), is("Apio"));
+	}
 
-		Page<String> page = optional.flatMap(
-			CollectionRoutes::getGetPageFunctionOptional
-		).get(
+	private void _testCollectionRoutesGetter(
+		CollectionRoutes<String, Long> collectionRoutes) {
+
+		Optional<GetPageFunction<String>> optional =
+			collectionRoutes.getGetPageFunctionOptional();
+
+		if (!optional.isPresent()) {
+			throw new AssertionError("GetPageFunction not present");
+		}
+
+		GetPageFunction<String> getPageFunction = optional.get();
+
+		Page<String> page = getPageFunction.andThen(
+			Try::getUnchecked
 		).apply(
 			null
-		).getUnchecked();
+		);
 
 		assertThat(page.getItems(), hasSize(1));
 		assertThat(page.getItems(), hasItem("Apio"));
@@ -331,6 +583,13 @@ public class CollectionRoutesImplTest {
 		assertThat(operation.getName(), is("name/create"));
 	}
 
-	private final Body _body = __ -> Optional.of("Apio");
+	private static final Body _batchBody;
+	private static final Body _singleBody;
+
+	static {
+		_singleBody = __ -> Optional.of("Apio");
+
+		_batchBody = Body.create(Arrays.asList(_singleBody, _singleBody));
+	}
 
 }

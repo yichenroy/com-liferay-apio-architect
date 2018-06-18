@@ -71,6 +71,12 @@ public class RoutesTestUtil {
 		HAS_UPDATE_PERMISSION_FUNCTION = (credentials, aLong) -> true;
 
 	/**
+	 * An identifier function that provides identifiers for models of type {@code String}.
+	 * @review
+	 */
+	public static final Function<String, Long> IDENTIFIER_FUNCTION = __ -> 42L;
+
+	/**
 	 * A mock {@code Pagination} object.
 	 */
 	public static final Pagination PAGINATION = new PaginationImpl(4, 2);
