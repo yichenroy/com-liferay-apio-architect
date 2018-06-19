@@ -153,7 +153,7 @@ public class FormEndpointTest {
 	private static <T, S> CollectionRoutes<T, S> _collectionRoutes() {
 		CollectionRoutes.Builder<T, S> builder =
 			new CollectionRoutesImpl.BuilderImpl<>(
-				"name", REQUEST_PROVIDE_FUNCTION,
+				"name", __ -> null, REQUEST_PROVIDE_FUNCTION,
 				__ -> {
 				},
 				__ -> null);
@@ -166,7 +166,8 @@ public class FormEndpointTest {
 	private static <T, S> CollectionRoutes<T, S> _emptyCollectionRoutes() {
 		return new CollectionRoutesImpl<>(
 			new CollectionRoutesImpl.BuilderImpl<>(
-				"", httpServletRequest -> aClass -> Optional.empty(),
+				"",
+				__ -> null, httpServletRequest -> aClass -> Optional.empty(),
 				__ -> {
 				},
 				__ -> null));
@@ -175,7 +176,8 @@ public class FormEndpointTest {
 	private static <T, S> ItemRoutes<T, S> _emptyItemRoutes() {
 		return new ItemRoutesImpl<>(
 			new ItemRoutesImpl.BuilderImpl<>(
-				"", httpServletRequest -> aClass -> Optional.empty(),
+				"",
+				__ -> null, httpServletRequest -> aClass -> Optional.empty(),
 				__ -> {
 				},
 				__ -> null));
@@ -194,7 +196,7 @@ public class FormEndpointTest {
 
 	private static <T, S> ItemRoutes<T, S> _itemRoutes() {
 		ItemRoutes.Builder<T, S> builder = new ItemRoutesImpl.BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION,
+			"name", __ -> null, REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
 			__ -> null);

@@ -67,11 +67,26 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		_createItemFunction = builderImpl._createItemFunction;
 		_form = builderImpl._form;
 		_getPageFunction = builderImpl._getPageFunction;
+
+		_customRoutes = builderImpl._customRoutes;
+		_customRouteFunctions = builderImpl._customRouteFunctions;
 	}
 
 	@Override
 	public Optional<CreateItemFunction<T>> getCreateItemFunctionOptional() {
 		return Optional.ofNullable(_createItemFunction);
+	}
+
+	@Override
+	public Optional<Map<String, CustomPageFunction<?>>>
+		getCustomRouteFunction() {
+
+		return Optional.of(_customRouteFunctions);
+	}
+
+	@Override
+	public Map<String, CustomRoute> getCustomRoutes() {
+		return _customRoutes;
 	}
 
 	@Override
@@ -89,13 +104,15 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		public BuilderImpl(
 			String name, ProvideFunction provideFunction,
 			Consumer<String> neededProviderConsumer,
-			Function<Path, ?> identifierFunction) {
+			Function<Path, ?> identifierFunction,
+			Function<String, Optional<String>> nameFunction) {
 
 			_name = name;
 			_provideFunction = provideFunction;
 			_neededProviderConsumer = neededProviderConsumer;
 
 			_identifierFunction = identifierFunction::apply;
+			_nameFunction = nameFunction;
 		}
 
 		@Override
@@ -645,13 +662,15 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		private HasAddingPermissionFunction _hasAddingPermissionFunction;
 		private final IdentifierFunction<?> _identifierFunction;
 		private final String _name;
-		private Function<String, Optional<String>> _nameFunction;
+		private final Function<String, Optional<String>> _nameFunction;
 		private final Consumer<String> _neededProviderConsumer;
 		private final ProvideFunction _provideFunction;
 
 	}
 
 	private final CreateItemFunction<T> _createItemFunction;
+	private final Map<String, CustomPageFunction<?>> _customRouteFunctions;
+	private final Map<String, CustomRoute> _customRoutes;
 	private final Form _form;
 	private final GetPageFunction<T> _getPageFunction;
 

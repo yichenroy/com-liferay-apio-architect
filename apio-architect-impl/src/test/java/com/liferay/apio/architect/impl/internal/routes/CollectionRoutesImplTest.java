@@ -58,7 +58,7 @@ public class CollectionRoutesImplTest {
 	@Test
 	public void testEmptyBuilderBuildsEmptyRoutes() {
 		Builder<String, ?> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION,
+			"name", __ -> null, REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
 			__ -> null);
@@ -106,7 +106,8 @@ public class CollectionRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, ?> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
+			"name", __ -> null, REQUEST_PROVIDE_FUNCTION, neededProviders::add,
+			__ -> null);
 
 		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
 			this::_testAndReturnThreeParameterCreatorRoute, String.class,
@@ -131,7 +132,8 @@ public class CollectionRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, ?> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
+			"name", __ -> null, REQUEST_PROVIDE_FUNCTION, neededProviders::add,
+			__ -> null);
 
 		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
 			this::_testAndReturnNoParameterCreatorRoute,
@@ -150,7 +152,8 @@ public class CollectionRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, ?> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
+			"name", __ -> null, REQUEST_PROVIDE_FUNCTION, neededProviders::add,
+			__ -> null);
 
 		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
 			this::_testAndReturnTwoParameterCreatorRoute, String.class,
@@ -172,7 +175,8 @@ public class CollectionRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, ?> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
+			"name", __ -> null, REQUEST_PROVIDE_FUNCTION, neededProviders::add,
+			__ -> null);
 
 		CollectionRoutes<String, ?> collectionRoutes = builder.addCreator(
 			this::_testAndReturnOneParameterCreatorRoute, String.class,

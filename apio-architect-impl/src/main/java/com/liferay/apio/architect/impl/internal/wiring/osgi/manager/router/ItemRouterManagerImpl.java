@@ -79,7 +79,8 @@ public class ItemRouterManagerImpl
 				Builder<Object, Object> builder = new BuilderImpl<>(
 					name, curry(_providerManager::provideMandatory),
 					neededProviders::add,
-					_pathIdentifierMapperManager::mapToIdentifierOrFail);
+					_pathIdentifierMapperManager::mapToIdentifierOrFail,
+					_nameManager::getNameOptional);
 
 				@SuppressWarnings("unchecked")
 				ItemRoutes itemRoutes = itemRouter.itemRoutes(builder);

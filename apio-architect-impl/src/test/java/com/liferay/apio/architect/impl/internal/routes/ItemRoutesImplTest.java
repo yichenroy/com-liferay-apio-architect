@@ -58,7 +58,7 @@ public class ItemRoutesImplTest {
 			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
-			__ -> null);
+			__ -> null, __ -> null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.build();
 
@@ -85,7 +85,8 @@ public class ItemRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+			__ -> null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnFourParameterGetterRoute, String.class,
@@ -115,7 +116,8 @@ public class ItemRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+			__ -> null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnThreeParameterGetterRoute, String.class,
@@ -145,7 +147,8 @@ public class ItemRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+			__ -> null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnNoParameterGetterRoute
@@ -169,7 +172,8 @@ public class ItemRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+			__ -> null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnTwoParameterGetterRoute, String.class,
@@ -196,7 +200,8 @@ public class ItemRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null);
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+			__ -> null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
 			this::_testAndReturnOneParameterGetterRoute, String.class

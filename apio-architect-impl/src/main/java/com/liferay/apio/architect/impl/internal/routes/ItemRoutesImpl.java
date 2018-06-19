@@ -74,6 +74,21 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		_form = builderImpl._form;
 		_singleModelFunction = builderImpl._singleModelFunction;
 		_updateItemFunction = builderImpl._updateItemFunction;
+
+		_customItemFunctions = builderImpl._customItemFunctions;
+		_customRoutes = builderImpl._customRoutes;
+	}
+
+	@Override
+	public Optional<Map<String, CustomItemFunction<?, S>>>
+		getCustomItemFunctions() {
+
+		return Optional.of(_customItemFunctions);
+	}
+
+	@Override
+	public Map<String, CustomRoute> getCustomRoutes() {
+		return _customRoutes;
 	}
 
 	@Override
@@ -110,13 +125,15 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		public BuilderImpl(
 			String name, ProvideFunction provideFunction,
 			Consumer<String> neededProviderConsumer,
-			Function<Path, ?> identifierFunction) {
+			Function<Path, ?> identifierFunction,
+			Function<String, Optional<String>> nameFunction) {
 
 			_name = name;
 			_provideFunction = provideFunction;
 			_neededProviderConsumer = neededProviderConsumer;
 
 			_identifierFunction = identifierFunction::apply;
+			_nameFunction = nameFunction;
 		}
 
 		public <R, I extends Identifier<S>> Builder<T, S> addCustomRoute(
@@ -741,7 +758,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 		private HasUpdatePermissionFunction<S> _hasUpdatePermissionFunction;
 		private final IdentifierFunction<?> _identifierFunction;
 		private final String _name;
-		private Function<String, Optional<String>> _nameFunction;
+		private final Function<String, Optional<String>> _nameFunction;
 		private final Consumer<String> _neededProviderConsumer;
 		private final ProvideFunction _provideFunction;
 		private GetItemFunction<T, S> _singleModelFunction;
@@ -749,6 +766,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 	}
 
+	private final Map<String, CustomItemFunction<?, S>> _customItemFunctions;
+	private final Map<String, CustomRoute> _customRoutes;
 	private final DeleteItemConsumer<S> _deleteItemConsumer;
 	private final Form _form;
 	private final GetItemFunction<T, S> _singleModelFunction;

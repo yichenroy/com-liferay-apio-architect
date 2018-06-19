@@ -14,6 +14,8 @@
 
 package com.liferay.apio.architect.impl.internal.endpoint;
 
+import static com.liferay.apio.architect.impl.internal.endpoint.ExceptionSupplierUtil.notFound;
+
 import com.liferay.apio.architect.custom.actions.CustomRoute;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.functional.Try;
@@ -66,12 +68,20 @@ public class FormEndpoint {
 			).flatMap(
 				CollectionRoutes::getFormOptional
 			),
-			ExceptionSupplierUtil.notFound(name));
+			notFound(name));
 	}
 
+	/**
+	 * Returns the custom {@link Form} for the specified resource.
+	 *
+	 * @param  name the resource's name, extracted from the URL
+	 * @param  nestedName the form's name, extracted from the URL
+	 * @return the {@link Form} for the specified resource, or an exception if
+	 *         an error occurred
+	 */
 	@GET
 	@Path("p/{name}/{nestedName}")
-	public Try<Form> myForm(
+	public Try<Form> customForm(
 		@PathParam("name") String name,
 		@PathParam("nestedName") String nestedName) {
 
@@ -108,7 +118,7 @@ public class FormEndpoint {
 			).flatMap(
 				NestedCollectionRoutes::getFormOptional
 			),
-			ExceptionSupplierUtil.notFound(name, nestedName));
+			notFound(name, nestedName));
 	}
 
 	/**
@@ -127,7 +137,7 @@ public class FormEndpoint {
 			).flatMap(
 				ItemRoutes::getFormOptional
 			),
-			ExceptionSupplierUtil.notFound(name));
+			notFound(name));
 	}
 
 	private final Function<String, Optional<CollectionRoutes<Object, Object>>>

@@ -68,13 +68,10 @@ public class MockDocumentationWriter {
 				"name", null,
 				__ -> {
 				},
-				__ -> null);
+				__ -> null, __ -> null);
 
 		ItemRoutes.Builder itemBuilder = new ItemRoutesImpl.BuilderImpl<>(
-			"name", null,
-			__ -> {
-			},
-			__ -> null);
+			"name", __ -> null, null, __ -> null, __ -> null);
 
 		NestedCollectionRoutes.Builder nestedBuilder =
 			new NestedCollectionRoutesImpl.BuilderImpl<>(
