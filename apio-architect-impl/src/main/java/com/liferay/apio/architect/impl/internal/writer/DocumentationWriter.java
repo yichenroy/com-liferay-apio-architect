@@ -382,19 +382,20 @@ public class DocumentationWriter {
 		).ifPresent(
 			itemRoutes -> {
 				Operation getOperation = new OperationImpl(
-					GET, name, "/retrieve", false);
+					GET, name, name + "/retrieve", false);
 
 				_writeOperation(
 					getOperation, resourceJsonObjectBuilder, name, type);
 
 				Operation updateOperation = _getOperation(
-					itemRoutes.getFormOptional(), PUT, name, "/update", false);
+					itemRoutes.getFormOptional(), PUT, name, name + "/update",
+					false);
 
 				_writeOperation(
 					updateOperation, resourceJsonObjectBuilder, name, type);
 
 				Operation deleteOperation = new OperationImpl(
-					DELETE, name, "/delete", false);
+					DELETE, name, name + "/delete", false);
 
 				_writeOperation(
 					deleteOperation, resourceJsonObjectBuilder, name, type);
@@ -430,12 +431,12 @@ public class DocumentationWriter {
 		).ifPresent(
 			collectionRoutes -> {
 				_writeOperation(
-					new OperationImpl(GET, resource, "/create", true),
+					new OperationImpl(GET, resource, resource, true),
 					resourceJsonObjectBuilder, resource, type);
 
 				Operation createOperation = _getOperation(
 					collectionRoutes.getFormOptional(), POST, resource,
-					"/create", true);
+					resource + "/create", true);
 
 				_writeOperation(
 					createOperation, resourceJsonObjectBuilder, resource, type);

@@ -679,7 +679,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 					)
 				).map(
 					form -> new OperationImpl(
-						form, POST, _name, "/create", true)
+						form, POST, _name, _name + "/create", true)
 				).map(
 					Collections::singletonList
 				).orElseGet(

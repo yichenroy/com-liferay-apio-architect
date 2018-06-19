@@ -403,12 +403,10 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					false
 				)
 			).map(
-				form -> new OperationImpl(
+				form -> (Operation)new OperationImpl(
 					form, POST,
 					join("/", _name, String.valueOf(identifier), _nestedName),
-					"create", true)
-			).map(
-				Operation.class::cast
+					join("/", _name, _nestedName, "create"), true)
 			).map(
 				Collections::singletonList
 			).orElseGet(

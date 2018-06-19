@@ -777,7 +777,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				)
 			).ifPresent(
 				__ -> operations.add(
-					new OperationImpl(DELETE, _name, "/delete", false))
+					new OperationImpl(DELETE, _name, _name + "/delete", false))
 			);
 
 			Optional.ofNullable(
@@ -790,7 +790,8 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 				)
 			).ifPresent(
 				__ -> operations.add(
-					new OperationImpl(_form, PUT, _name, "/update", false))
+					new OperationImpl(
+						_form, PUT, _name, _name + "/update", false))
 			);
 
 			Set<String> customPermissionKeys =
