@@ -20,16 +20,21 @@ import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
 import com.liferay.apio.architect.alias.routes.CreateItemFunction;
+import com.liferay.apio.architect.alias.routes.CustomPageFunction;
 import com.liferay.apio.architect.alias.routes.GetPageFunction;
 import com.liferay.apio.architect.alias.routes.permission.HasAddingPermissionFunction;
 import com.liferay.apio.architect.credentials.Credentials;
+import com.liferay.apio.architect.custom.actions.CustomRoute;
+import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.function.throwable.ThrowableBiFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableFunction;
+import com.liferay.apio.architect.function.throwable.ThrowableHexaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowablePentaFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTetraFunction;
 import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.identifier.Identifier;
 import com.liferay.apio.architect.impl.internal.alias.ProvideFunction;
 import com.liferay.apio.architect.impl.internal.form.FormImpl;
 import com.liferay.apio.architect.impl.internal.operation.OperationImpl;
@@ -43,10 +48,14 @@ import com.liferay.apio.architect.uri.Path;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * @author Alejandro Hernández
@@ -86,6 +95,197 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			_neededProviderConsumer = neededProviderConsumer;
 
 			_identifierFunction = identifierFunction::apply;
+		}
+
+		public <R, I extends Identifier> CollectionRoutes.Builder<T, S>
+		addCustomRoute(
+			CustomRoute<T> customRoute,
+			ThrowableBiFunction<Pagination, T, R> throwableBiFunction,
+			Class<I> supplier,
+			Function<Credentials, Boolean> permissionFunction) {
+
+			return addCustomRoute(
+				customRoute, throwableBiFunction, supplier, permissionFunction,
+				null);
+		}
+
+		public <R, I extends Identifier> CollectionRoutes.Builder<T, S>
+		addCustomRoute(
+			CustomRoute<T> customRoute,
+			ThrowableBiFunction<Pagination, T, R> throwableBiFunction,
+			Class<I> supplier,
+			Function<Credentials, Boolean> permissionFunction,
+			FormBuilderFunction<T> formBuilderFunction) {
+
+			String name = customRoute.getName();
+
+			Optional<Form<T>> form = _getFormOptional(
+				formBuilderFunction, name);
+
+			_customRoutes.put(name, customRoute);
+			_customPermissionFunctions.put(name, permissionFunction);
+
+			CustomPageFunction<R> requestFunction =
+				httpServletRequest -> body -> provide(
+					_provideFunction.apply(httpServletRequest),
+					Pagination.class,
+					pagination -> throwableBiFunction.andThen(
+						model -> new SingleModel(
+							model, _getResourceName(supplier))
+					).apply(
+						pagination, _getModel(form, body)
+					));
+
+			_customRouteFunctions.put(name, requestFunction);
+
+			return this;
+		}
+
+		public <A, B, C, D, R, I extends Identifier>
+			CollectionRoutes.Builder<T, S> addCustomRoute(
+				CustomRoute<T> customRoute,
+				ThrowableHexaFunction<Pagination, T, A, B, C, D, R>
+					throwableHexaFunction,
+				Class<A> aClass, Class<B> bClass, Class<C> cClass,
+				Class<D> dClass, Class<I> supplier,
+				Function<Credentials, Boolean> permissionFunction,
+				FormBuilderFunction<T> formBuilderFunction) {
+
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+			_neededProviderConsumer.accept(cClass.getName());
+			_neededProviderConsumer.accept(dClass.getName());
+
+			String name = customRoute.getName();
+
+			Optional<Form<T>> form = _getFormOptional(
+				formBuilderFunction, name);
+
+			_customRoutes.put(name, customRoute);
+			_customPermissionFunctions.put(name, permissionFunction);
+
+			CustomPageFunction<R> requestFunction =
+				httpServletRequest -> body -> provide(
+					_provideFunction.apply(httpServletRequest),
+					Pagination.class, aClass, bClass, cClass, dClass,
+					(pagination, a, b, c, d) -> throwableHexaFunction.andThen(
+						model -> new SingleModel(
+							model, _getResourceName(supplier))
+					).apply(
+						pagination, _getModel(form, body), a, b, c, d
+					));
+
+			_customRouteFunctions.put(name, requestFunction);
+
+			return this;
+		}
+
+		public <A, B, C, R, I extends Identifier> CollectionRoutes.Builder<T, S>
+			addCustomRoute(
+				CustomRoute<T> customRoute,
+				ThrowablePentaFunction<Pagination, T, A, B, C, R>
+					throwablePentaFunction,
+				Class<A> aClass, Class<B> bClass, Class<C> cClass,
+				Class<I> supplier,
+				Function<Credentials, Boolean> permissionFunction,
+				FormBuilderFunction<T> formBuilderFunction) {
+
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+			_neededProviderConsumer.accept(cClass.getName());
+
+			String name = customRoute.getName();
+
+			Optional<Form<T>> form = _getFormOptional(
+				formBuilderFunction, name);
+
+			_customRoutes.put(name, customRoute);
+			_customPermissionFunctions.put(name, permissionFunction);
+
+			CustomPageFunction<R> requestFunction =
+				httpServletRequest -> body -> provide(
+					_provideFunction.apply(httpServletRequest),
+					Pagination.class, aClass, bClass, cClass,
+					(pagination, a, b, c) -> throwablePentaFunction.andThen(
+						model -> new SingleModel(
+							model, _getResourceName(supplier))
+					).apply(
+						pagination, _getModel(form, body), a, b, c
+					));
+
+			_customRouteFunctions.put(name, requestFunction);
+
+			return this;
+		}
+
+		public <A, B, R, I extends Identifier> CollectionRoutes.Builder<T, S>
+			addCustomRoute(
+				CustomRoute<T> customRoute,
+				ThrowableTetraFunction<Pagination, T, A, B, R>
+					throwableTetraFunction,
+				Class<A> aClass, Class<B> bClass, Class<I> supplier,
+				Function<Credentials, Boolean> permissionFunction,
+				FormBuilderFunction<T> formBuilderFunction) {
+
+			_neededProviderConsumer.accept(aClass.getName());
+			_neededProviderConsumer.accept(bClass.getName());
+
+			String name = customRoute.getName();
+
+			Optional<Form<T>> form = _getFormOptional(
+				formBuilderFunction, name);
+
+			_customRoutes.put(name, customRoute);
+			_customPermissionFunctions.put(name, permissionFunction);
+
+			CustomPageFunction<R> requestFunction =
+				httpServletRequest -> body -> provide(
+					_provideFunction.apply(httpServletRequest),
+					Pagination.class, aClass, bClass,
+					(pagination, a, b) -> throwableTetraFunction.andThen(
+						model -> new SingleModel(
+							model, _getResourceName(supplier))
+					).apply(
+						pagination, _getModel(form, body), a, b
+					));
+
+			_customRouteFunctions.put(name, requestFunction);
+
+			return this;
+		}
+
+		public <A, R, I extends Identifier> CollectionRoutes.Builder<T, S>
+			addCustomRoute(
+			CustomRoute<T> customRoute,
+			ThrowableTriFunction<Pagination, T, A, R> throwableTriFunction,
+			Class<A> aClass, Class<I> supplier,
+			Function<Credentials, Boolean> permissionFunction,
+			FormBuilderFunction<T> formBuilderFunction) {
+
+			_neededProviderConsumer.accept(aClass.getName());
+
+			String name = customRoute.getName();
+
+			Optional<Form<T>> form = _getFormOptional(
+				formBuilderFunction, name);
+
+			_customRoutes.put(name, customRoute);
+			_customPermissionFunctions.put(name, permissionFunction);
+
+			CustomPageFunction<R> requestFunction =
+				httpServletRequest -> body -> provide(
+					_provideFunction.apply(httpServletRequest),
+					Pagination.class, aClass,
+					(pagination, a) -> throwableTriFunction.andThen(
+						model -> new SingleModel(
+							model, _getResourceName(supplier))
+					).apply(
+						pagination, _getModel(form, body), a
+					));
+
+			_customRouteFunctions.put(name, requestFunction);
+
+			return this;
 		}
 
 		@Override
@@ -373,6 +573,92 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 				Collections::emptyList
 			);
 		}
+
+
+		private Optional<Form<T>> _getFormOptional(
+			FormBuilderFunction<T> formBuilderFunction, String name) {
+
+			if (formBuilderFunction == null) {
+				return Optional.empty();
+			}
+			else {
+				Form<T> form = formBuilderFunction.apply(
+					new Form.Builder<>(
+						Arrays.asList("p", _name, name), _identifierFunction));
+
+				return Optional.of(form);
+			}
+		}
+
+		private T _getModel(Optional<Form<T>> form, Body body) {
+			return form.map(
+				f -> f.get(body)
+			).orElse(
+				null
+			);
+		}
+
+		private List<Operation> _getOperations(Credentials credentials) {
+			List<Operation> operations = new ArrayList<>(
+				Optional.ofNullable(_form
+				).filter(
+					__ -> Try.fromFallible(
+						() -> _hasAddingPermissionFunction.apply(credentials)
+					).orElse(
+						false
+					)
+				).map(
+					form -> new Operation(form, POST, _name, "/create", true)
+				).map(
+					Collections::singletonList
+				).orElseGet(
+					Collections::emptyList
+				)
+			);
+
+			Set<String> customPermissionKeys =
+				_customPermissionFunctions.keySet();
+
+			Stream<String> customPermissionKeysStream =
+				customPermissionKeys.stream();
+
+			customPermissionKeysStream.filter(
+				key -> Try.fromFallible(
+					() -> _customPermissionFunctions.get(key).apply(
+						credentials)).orElse(false)).forEach(
+				routeEntry -> {
+					CustomRoute customRoute = _customRoutes.get(routeEntry);
+
+					Optional<Form> formOptional = customRoute.getForm();
+
+					Form form = formOptional.orElse(null);
+
+					Operation operation = new Operation(
+						form, customRoute.getMethod(), _name, routeEntry, false,
+						true);
+
+					operations.add(operation);
+				});
+
+			return operations;
+		}
+
+		private <I extends Identifier> String _getResourceName(
+			Class<I> supplier) {
+
+			return _nameFunction.apply(
+				supplier.getName()
+			).orElse(
+				null
+			);
+		}
+
+		private final Map<String, Function<Credentials, Boolean>>
+			_customPermissionFunctions = new HashMap<>();
+		private Map<String, CustomPageFunction<?>> _customRouteFunctions =
+			new HashMap<>();
+		private final Map<String, CustomRoute> _customRoutes = new HashMap<>();
+		private final Function<String, Optional<String>> _nameFunction;
 
 		private CreateItemFunction<T> _createItemFunction;
 		private Form _form;
