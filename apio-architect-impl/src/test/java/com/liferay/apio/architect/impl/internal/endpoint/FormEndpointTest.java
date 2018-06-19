@@ -153,10 +153,10 @@ public class FormEndpointTest {
 	private static <T, S> CollectionRoutes<T, S> _collectionRoutes() {
 		CollectionRoutes.Builder<T, S> builder =
 			new CollectionRoutesImpl.BuilderImpl<>(
-				"name", __ -> null, REQUEST_PROVIDE_FUNCTION,
+				"name", REQUEST_PROVIDE_FUNCTION,
 				__ -> {
 				},
-				__ -> null);
+				__ -> null, __ -> null);
 
 		return builder.addCreator(
 			__ -> null, HAS_ADDING_PERMISSION_FUNCTION, FORM_BUILDER_FUNCTION
@@ -166,21 +166,19 @@ public class FormEndpointTest {
 	private static <T, S> CollectionRoutes<T, S> _emptyCollectionRoutes() {
 		return new CollectionRoutesImpl<>(
 			new CollectionRoutesImpl.BuilderImpl<>(
-				"",
-				__ -> null, httpServletRequest -> aClass -> Optional.empty(),
+				"", httpServletRequest -> aClass -> Optional.empty(),
 				__ -> {
 				},
-				__ -> null));
+				__ -> null, __ -> null));
 	}
 
 	private static <T, S> ItemRoutes<T, S> _emptyItemRoutes() {
 		return new ItemRoutesImpl<>(
 			new ItemRoutesImpl.BuilderImpl<>(
-				"",
-				__ -> null, httpServletRequest -> aClass -> Optional.empty(),
+				"", httpServletRequest -> aClass -> Optional.empty(),
 				__ -> {
 				},
-				__ -> null));
+				__ -> null, __ -> null));
 	}
 
 	private static <T, S, U> NestedCollectionRoutes<T, S, U>
@@ -196,10 +194,10 @@ public class FormEndpointTest {
 
 	private static <T, S> ItemRoutes<T, S> _itemRoutes() {
 		ItemRoutes.Builder<T, S> builder = new ItemRoutesImpl.BuilderImpl<>(
-			"name", __ -> null, REQUEST_PROVIDE_FUNCTION,
+			"name", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
-			__ -> null);
+			__ -> null, __ -> null);
 
 		return builder.addUpdater(
 			(aLong, body) -> null, (credentials, s) -> true,

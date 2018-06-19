@@ -85,7 +85,7 @@ public class ItemRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
 			__ -> null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
@@ -116,7 +116,7 @@ public class ItemRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
 			__ -> null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
@@ -147,7 +147,7 @@ public class ItemRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
 			__ -> null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
@@ -172,7 +172,7 @@ public class ItemRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
 			__ -> null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
@@ -200,7 +200,7 @@ public class ItemRoutesImplTest {
 		Set<String> neededProviders = new TreeSet<>();
 
 		Builder<String, Long> builder = new BuilderImpl<>(
-			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, null,
+			"name", REQUEST_PROVIDE_FUNCTION, neededProviders::add, __ -> null,
 			__ -> null);
 
 		ItemRoutes<String, Long> itemRoutes = builder.addGetter(
