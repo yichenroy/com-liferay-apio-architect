@@ -74,6 +74,15 @@ public class RootEndpointImpl implements RootEndpoint {
 	}
 
 	@Override
+	public CustomOperationsEndpoint customOperationsEndpoint(String name) {
+		return new CustomOperationsEndpoint<>(
+			name, _httpServletRequest,
+			() -> _collectionRouterManager.getCollectionRoutesOptional(name),
+			() -> _itemRouterManager.getItemRoutesOptional(name),
+			_pathIdentifierMapperManager::mapToIdentifierOrFail);
+	}
+
+	@Override
 	public Documentation documentation() {
 		return _documentation;
 	}

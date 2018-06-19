@@ -76,7 +76,7 @@ public class ItemRouterManagerImpl
 
 				Set<String> neededProviders = new TreeSet<>();
 
-				Builder builder = new BuilderImpl<>(
+				Builder<Object, Object> builder = new BuilderImpl<>(
 					name, curry(_providerManager::provideMandatory),
 					neededProviders::add,
 					_pathIdentifierMapperManager::mapToIdentifierOrFail);
