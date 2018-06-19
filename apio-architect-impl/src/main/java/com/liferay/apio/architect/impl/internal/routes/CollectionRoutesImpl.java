@@ -110,7 +110,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			ThrowableBiFunction<List<R>, A, List<S>>
 				batchCreatorThrowableBiFunction = (formList, a) ->
-					_getIdentifierList(
+					_transformList(
 						formList, r -> creatorThrowableBiFunction.apply(r, a));
 
 			return addCreator(
@@ -163,8 +163,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			FormBuilderFunction<R> formBuilderFunction) {
 
 			ThrowableFunction<List<R>, List<S>> batchCreatorThrowableFunction =
-				formList -> _getIdentifierList(
-					formList, creatorThrowableFunction);
+				formList -> _transformList(formList, creatorThrowableFunction);
 
 			return addCreator(
 				creatorThrowableFunction, batchCreatorThrowableFunction,
@@ -216,7 +215,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			ThrowablePentaFunction<List<R>, A, B, C, D, List<S>>
 				batchCreatorThrowablePentaFunction = (formList, a, b, c, d) ->
-					_getIdentifierList(
+					_transformList(
 						formList,
 						r -> creatorThrowablePentaFunction.apply(
 							r, a, b, c, d));
@@ -281,7 +280,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			ThrowableTetraFunction<List<R>, A, B, C, List<S>>
 				batchCreatorThrowableTetraFunction = (formList, a, b, c) ->
-					_getIdentifierList(
+					_transformList(
 						formList,
 						r -> creatorThrowableTetraFunction.apply(r, a, b, c));
 
@@ -343,7 +342,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 			ThrowableTriFunction<List<R>, A, B, List<S>>
 				batchCreatorThrowableTriFunction = (formList, a, b) ->
-					_getIdentifierList(
+					_transformList(
 						formList,
 						r -> creatorThrowableTriFunction.apply(r, a, b));
 
@@ -515,26 +514,6 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			return new CollectionRoutesImpl<>(this);
 		}
 
-		private <R> List<S> _getIdentifierList(
-				List<R> formList,
-				ThrowableFunction<R, T> transformThrowableFunction)
-			throws Exception {
-
-			List<S> list = new ArrayList<>();
-
-			for (R r : formList) {
-				S s = transformThrowableFunction.andThen(
-					_modelToIdentifierFunction::apply
-				).apply(
-					r
-				);
-
-				list.add(s);
-			}
-
-			return list;
-		}
-
 		private List<Operation> _getOperations(Credentials credentials) {
 			return Optional.ofNullable(
 				_form
@@ -553,6 +532,26 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			).orElseGet(
 				Collections::emptyList
 			);
+		}
+
+		private <U> List<S> _transformList(
+				List<U> list,
+				ThrowableFunction<U, T> transformThrowableFunction)
+			throws Exception {
+
+			List<S> newList = new ArrayList<>();
+
+			for (U u : list) {
+				S s = transformThrowableFunction.andThen(
+					_modelToIdentifierFunction::apply
+				).apply(
+					u
+				);
+
+				newList.add(s);
+			}
+
+			return newList;
 		}
 
 		private BatchCreateItemFunction<S> _batchCreateItemFunction;
