@@ -29,14 +29,6 @@ import java.util.Optional;
 public interface Operation {
 
 	/**
-	 * Return the operation's form.
-	 *
-	 * @return the operation's form.
-	 * @review
-	 */
-	public Form getForm();
-
-	/**
 	 * Returns this operation's expected form, if present; returns {@code
 	 * Optional#empty()} otherwise.
 	 *

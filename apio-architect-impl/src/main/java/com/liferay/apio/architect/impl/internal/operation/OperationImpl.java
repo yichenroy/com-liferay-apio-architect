@@ -59,11 +59,6 @@ public class OperationImpl implements Operation {
 	}
 
 	@Override
-	public Form getForm() {
-		return _form;
-	}
-
-	@Override
 	public Optional<Form> getFormOptional() {
 		return Optional.ofNullable(_form);
 	}

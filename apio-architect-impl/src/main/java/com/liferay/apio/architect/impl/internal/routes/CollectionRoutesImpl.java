@@ -264,20 +264,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			return this;
 		}
 
-		/**
-		 * Adds a custom route with the http method specified in customRoute and
-		 * with a function that receives the pagination and returns another
-		 * model of type R
-		 *
-		 * @param  customRoute the name and method of the custom route
-		 * @param  throwableBiFunction the custom route function
-		 * @param  supplier the class of the identifier of the type R
-		 * @param  permissionFunction the permission function for this route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
-		 * @review
-		 */
+		@Override
 		public <R, I extends Identifier> CollectionRoutes.Builder<T, S>
 			addCustomRoute(
 				CustomRoute<T> customRoute,
@@ -310,24 +297,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			return this;
 		}
 
-		/**
-		 * Adds a custom route with the http method specified in customRoute and
-		 * with a function that receives the pagination and returns another
-		 * model of type R
-		 *
-		 * @param  customRoute the name and method of the custom route
-		 * @param  throwableHexaFunction the custom route function
-		 * @param  aClass the class of the page function's second parameter
-		 * @param  bClass the class of the page function's third parameter
-		 * @param  cClass the class of the page function's fourth parameter
-		 * @param  dClass the class of the page function's fifth parameter
-		 * @param  supplier the class of the identifier of the type R
-		 * @param  permissionFunction the permission function for this route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
-		 * @review
-		 */
+		@Override
 		public <A, B, C, D, R, I extends Identifier>
 			CollectionRoutes.Builder<T, S> addCustomRoute(
 				CustomRoute<T> customRoute,
@@ -367,23 +337,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			return this;
 		}
 
-		/**
-		 * Adds a custom route with the http method specified in customRoute and
-		 * with a function that receives the pagination and returns another
-		 * model of type R
-		 *
-		 * @param  customRoute the name and method of the custom route
-		 * @param  throwablePentaFunction the custom route function
-		 * @param  aClass the class of the page function's second parameter
-		 * @param  bClass the class of the page function's third parameter
-		 * @param  cClass the class of the page function's fourth parameter
-		 * @param  supplier the class of the identifier of the type R
-		 * @param  permissionFunction the permission function for this route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
-		 * @review
-		 */
+		@Override
 		public <A, B, C, R, I extends Identifier> CollectionRoutes.Builder<T, S>
 			addCustomRoute(
 				CustomRoute<T> customRoute,
@@ -422,22 +376,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			return this;
 		}
 
-		/**
-		 * Adds a custom route with the http method specified in customRoute and
-		 * with a function that receives the pagination and returns another
-		 * model of type R
-		 *
-		 * @param  customRoute the name and method of the custom route
-		 * @param  throwableTetraFunction the custom route function
-		 * @param  aClass the class of the page function's second parameter
-		 * @param  bClass the class of the page function's third parameter
-		 * @param  supplier the class of the identifier of the type R
-		 * @param  permissionFunction the permission function for this route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
-		 * @review
-		 */
+		@Override
 		public <A, B, R, I extends Identifier> CollectionRoutes.Builder<T, S>
 			addCustomRoute(
 				CustomRoute<T> customRoute,
@@ -474,21 +413,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 			return this;
 		}
 
-		/**
-		 * Adds a custom route with the http method specified in customRoute and
-		 * with a function that receives the pagination and returns another
-		 * model of type R
-		 *
-		 * @param  customRoute the name and method of the custom route
-		 * @param  throwableTriFunction the custom route function
-		 * @param  aClass the class of the page function's second parameter
-		 * @param  supplier the class of the identifier of the type R
-		 * @param  permissionFunction the permission function for this route
-		 * @param  formBuilderFunction the function that creates the form for
-		 *         this operation
-		 * @return the updated builder
-		 * @review
-		 */
+		@Override
 		public <A, R, I extends Identifier> CollectionRoutes.Builder<T, S>
 			addCustomRoute(
 				CustomRoute<T> customRoute,
