@@ -31,8 +31,9 @@ import javax.ws.rs.Path;
 public interface BatchEndpoint {
 
 	/**
-	 * Adds multiple {@link com.liferay.apio.architect.single.model.SingleModel} to the resource specified by {@code
-	 * name}. This occurs via a POST request to the resource.
+	 * Adds multiple {@link com.liferay.apio.architect.single.model.SingleModel}
+	 * to the resource specified by {@code name}. This occurs via a POST request
+	 * to the resource.
 	 *
 	 * @param  body the request's body
 	 * @return the batch result operation, or an exception if an error occurred

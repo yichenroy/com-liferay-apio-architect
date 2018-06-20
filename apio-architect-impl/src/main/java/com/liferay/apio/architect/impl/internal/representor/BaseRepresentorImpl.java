@@ -317,8 +317,8 @@ public abstract class BaseRepresentorImpl<T> implements BaseRepresentor<T> {
 	 *
 	 * @param  key the relation's name
 	 * @param  identifierClass the related model identifier's class
-	 * @param  modelToIdentifierFunction the function used to get the related model's
-	 *         identifier
+	 * @param  modelToIdentifierFunction the function used to get the related
+	 *         model's identifier
 	 * @review
 	 */
 	protected <S> void addRelatedModel(

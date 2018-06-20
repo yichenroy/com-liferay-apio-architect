@@ -44,8 +44,10 @@ public interface RelatedModel<T, S> {
 	 * Returns the function you can use to retrieve the related resource's
 	 * identifier.
 	 *
-	 * @return the function that calculates the related resource's identifier
-	 * @deprecated As of 1.0.0, replaced by {@link #getModelToIdentifierFunction()}
+	 * @return     the function that calculates the related resource's
+	 *             identifier
+	 * @deprecated As of 1.0.0, replaced by {@link
+	 *             #getModelToIdentifierFunction()}
 	 * @review
 	 */
 	@Deprecated

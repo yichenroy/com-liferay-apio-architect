@@ -110,7 +110,8 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an item function with one extra parameter.
 		 *
-		 * @param  getterThrowableBiFunction the function that calculates the item
+		 * @param  getterThrowableBiFunction the function that calculates the
+		 *         item
 		 * @param  aClass the class of the item function's second parameter
 		 * @return the updated builder
 		 */
@@ -130,7 +131,8 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an item function with four extra parameters.
 		 *
-		 * @param  getterThrowablePentaFunction the function that calculates the item
+		 * @param  getterThrowablePentaFunction the function that calculates the
+		 *         item
 		 * @param  aClass the class of the item function's second parameter
 		 * @param  bClass the class of the item function's third parameter
 		 * @param  cClass the class of the item function's fourth parameter
@@ -145,7 +147,8 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an item function with three extra parameters.
 		 *
-		 * @param  getterThrowableTetraFunction the function that calculates the item
+		 * @param  getterThrowableTetraFunction the function that calculates the
+		 *         item
 		 * @param  aClass the class of the item function's second parameter
 		 * @param  bClass the class of the item function's third parameter
 		 * @param  cClass the class of the item function's fourth parameter
@@ -158,7 +161,8 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an item function with two extra parameters.
 		 *
-		 * @param  getterThrowableTriFunction the function that calculates the item
+		 * @param  getterThrowableTriFunction the function that calculates the
+		 *         item
 		 * @param  aClass the class of the item function's second parameter
 		 * @param  bClass the class of the item function's third parameter
 		 * @return the updated builder
@@ -290,8 +294,8 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an updater function with three extra parameters.
 		 *
-		 * @param  updaterThrowablePentaFunction the updater function that removes the
-		 *         item
+		 * @param  updaterThrowablePentaFunction the updater function that
+		 *         removes the item
 		 * @param  aClass the class of the updater function's third parameter
 		 * @param  bClass the class of the updater function's fourth parameter
 		 * @param  cClass the class of the updater function's fifth parameter
@@ -329,8 +333,8 @@ public interface ItemRoutes<T, S> {
 		/**
 		 * Adds a route to an updater function with one extra parameter.
 		 *
-		 * @param  updaterThrowableTriFunction the updater function that removes the
-		 *         item
+		 * @param  updaterThrowableTriFunction the updater function that removes
+		 *         the item
 		 * @param  aClass the class of the updater function's third parameter
 		 * @param  hasUpdatePermissionFunction the permission function for this
 		 *         route

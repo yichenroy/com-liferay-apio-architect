@@ -65,13 +65,13 @@ public interface NestedCollectionRoutes<T, S, U> {
 	public Optional<Form> getFormOptional();
 
 	/**
-	 * Returns the function that is used to create multiple collection items, if the
-	 * endpoint was added through the {@link NestedCollectionRoutes.Builder} and
-	 * the function therefore exists. Returns {@code Optional#empty()}
+	 * Returns the function that is used to create multiple collection items, if
+	 * the endpoint was added through the {@link NestedCollectionRoutes.Builder}
+	 * and the function therefore exists. Returns {@code Optional#empty()}
 	 * otherwise.
 	 *
-	 * @return the function used to create multiple collection items, if the function
-	 *         exists; {@code Optional#empty()} otherwise
+	 * @return the function used to create multiple collection items, if the
+	 *         function exists; {@code Optional#empty()} otherwise
 	 */
 	public Optional<NestedBatchCreateItemFunction<S, U>>
 		getNestedBatchCreateItemFunctionOptional();
@@ -152,8 +152,8 @@ public interface NestedCollectionRoutes<T, S, U> {
 		/**
 		 * Adds a route to a creator function that has four extra parameters.
 		 *
-		 * @param  creatorThrowableHexaFunction the creator function that adds the
-		 *         collection item
+		 * @param  creatorThrowableHexaFunction the creator function that adds
+		 *         the collection item
 		 * @param  aClass the class of the creator function's third parameter
 		 * @param  bClass the class of the creator function's fourth parameter
 		 * @param  cClass the class of the creator function's fifth parameter
@@ -175,8 +175,8 @@ public interface NestedCollectionRoutes<T, S, U> {
 		/**
 		 * Adds a route to a creator function that has four extra parameters.
 		 *
-		 * @param  creatorThrowableHexaFunction the creator function that adds the
-		 *         collection item
+		 * @param  creatorThrowableHexaFunction the creator function that adds
+		 *         the collection item
 		 * @param  batchCreatorThrowableHexaFunction the batch creator function
 		 * @param  aClass the class of the creator function's third parameter
 		 * @param  bClass the class of the creator function's fourth parameter
@@ -201,8 +201,8 @@ public interface NestedCollectionRoutes<T, S, U> {
 		/**
 		 * Adds a route to a creator function that has three extra parameters.
 		 *
-		 * @param  creatorThrowablePentaFunction the creator function that adds the
-		 *         collection item
+		 * @param  creatorThrowablePentaFunction the creator function that adds
+		 *         the collection item
 		 * @param  aClass the class of the creator function's third parameter
 		 * @param  bClass the class of the creator function's fourth parameter
 		 * @param  cClass the class of the creator function's fifth parameter
@@ -223,8 +223,8 @@ public interface NestedCollectionRoutes<T, S, U> {
 		/**
 		 * Adds a route to a creator function that has three extra parameters.
 		 *
-		 * @param  creatorThrowablePentaFunction the creator function that adds the
-		 *         collection item
+		 * @param  creatorThrowablePentaFunction the creator function that adds
+		 *         the collection item
 		 * @param  batchCreatorThrowablePentaFunction the batch creator function
 		 * @param  aClass the class of the creator function's third parameter
 		 * @param  bClass the class of the creator function's fourth parameter
@@ -248,8 +248,8 @@ public interface NestedCollectionRoutes<T, S, U> {
 		/**
 		 * Adds a route to a creator function that has two extra parameters.
 		 *
-		 * @param  creatorThrowableTetraFunction the creator function that adds the
-		 *         collection item
+		 * @param  creatorThrowableTetraFunction the creator function that adds
+		 *         the collection item
 		 * @param  aClass the class of the creator function's third parameter
 		 * @param  bClass the class of the creator function's fourth parameter
 		 * @param  hasNestedAddingPermissionFunction the permission function for
@@ -268,8 +268,8 @@ public interface NestedCollectionRoutes<T, S, U> {
 		/**
 		 * Adds a route to a creator function that has two extra parameters.
 		 *
-		 * @param  creatorThrowableTetraFunction the creator function that adds the
-		 *         collection item
+		 * @param  creatorThrowableTetraFunction the creator function that adds
+		 *         the collection item
 		 * @param  batchCreatorThrowableTetraFunction the batch creator function
 		 * @param  aClass the class of the creator function's third parameter
 		 * @param  bClass the class of the creator function's fourth parameter
@@ -291,8 +291,8 @@ public interface NestedCollectionRoutes<T, S, U> {
 		/**
 		 * Adds a route to a creator function that has one extra parameter.
 		 *
-		 * @param  creatorThrowableTriFunction the creator function that adds the
-		 *         collection item
+		 * @param  creatorThrowableTriFunction the creator function that adds
+		 *         the collection item
 		 * @param  aClass the class of the creator function's third parameter
 		 * @param  hasNestedAddingPermissionFunction the permission function for
 		 *         this route
@@ -310,8 +310,8 @@ public interface NestedCollectionRoutes<T, S, U> {
 		/**
 		 * Adds a route to a creator function that has one extra parameter.
 		 *
-		 * @param  creatorThrowableTriFunction the creator function that adds the
-		 *         collection item
+		 * @param  creatorThrowableTriFunction the creator function that adds
+		 *         the collection item
 		 * @param  batchCreatorThrowableTriFunction the batch creator function
 		 * @param  aClass the class of the creator function's third parameter
 		 * @param  hasNestedAddingPermissionFunction the permission function for
@@ -333,7 +333,8 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * Adds a route to a collection page function with none extra
 		 * parameters.
 		 *
-		 * @param  getterThrowableBiFunction the function that calculates the page
+		 * @param  getterThrowableBiFunction the function that calculates the
+		 *         page
 		 * @return the updated builder
 		 */
 		public Builder<T, S, U> addGetter(
@@ -344,7 +345,8 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * Adds a route to a collection page function with four extra
 		 * parameters.
 		 *
-		 * @param  getterThrowableHexaFunction the function that calculates the page
+		 * @param  getterThrowableHexaFunction the function that calculates the
+		 *         page
 		 * @param  aClass the class of the page function's second parameter
 		 * @param  bClass the class of the page function's third parameter
 		 * @param  cClass the class of the page function's fourth parameter
@@ -360,7 +362,8 @@ public interface NestedCollectionRoutes<T, S, U> {
 		 * Adds a route to a collection page function with three extra
 		 * parameters.
 		 *
-		 * @param  getterThrowablePentaFunction the function that calculates the page
+		 * @param  getterThrowablePentaFunction the function that calculates the
+		 *         page
 		 * @param  aClass the class of the page function's second parameter
 		 * @param  bClass the class of the page function's third parameter
 		 * @param  cClass the class of the page function's fourth parameter
@@ -374,7 +377,8 @@ public interface NestedCollectionRoutes<T, S, U> {
 		/**
 		 * Adds a route to a collection page function with two extra parameters.
 		 *
-		 * @param  getterThrowableTetraFunction the function that calculates the page
+		 * @param  getterThrowableTetraFunction the function that calculates the
+		 *         page
 		 * @param  aClass the class of the page function's second parameter
 		 * @param  bClass the class of the page function's third parameter
 		 * @return the updated builder
@@ -387,7 +391,8 @@ public interface NestedCollectionRoutes<T, S, U> {
 		/**
 		 * Adds a route to a collection page function with one extra parameter.
 		 *
-		 * @param  getterThrowableTriFunction the function that calculates the page
+		 * @param  getterThrowableTriFunction the function that calculates the
+		 *         page
 		 * @param  aClass the class of the page function's second parameter
 		 * @return the updated builder
 		 */

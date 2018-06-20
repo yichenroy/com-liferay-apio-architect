@@ -297,7 +297,8 @@ public interface CollectionRoutes<T, S> {
 		/**
 		 * Adds a route to a collection page function with one extra parameter.
 		 *
-		 * @param  getterThrowableBiFunction the function that calculates the page
+		 * @param  getterThrowableBiFunction the function that calculates the
+		 *         page
 		 * @param  aClass the class of the page function's third parameter
 		 * @return the updated builder
 		 */
@@ -321,7 +322,8 @@ public interface CollectionRoutes<T, S> {
 		 * Adds a route to a collection page function with four extra
 		 * parameters.
 		 *
-		 * @param  getterThrowablePentaFunction the function that calculates the page
+		 * @param  getterThrowablePentaFunction the function that calculates the
+		 *         page
 		 * @param  aClass the class of the page function's second parameter
 		 * @param  bClass the class of the page function's third parameter
 		 * @param  cClass the class of the page function's fourth parameter
@@ -337,7 +339,8 @@ public interface CollectionRoutes<T, S> {
 		 * Adds a route to a collection page function with three extra
 		 * parameters.
 		 *
-		 * @param  getterThrowableTetraFunction the function that calculates the page
+		 * @param  getterThrowableTetraFunction the function that calculates the
+		 *         page
 		 * @param  aClass the class of the page function's second parameter
 		 * @param  bClass the class of the page function's third parameter
 		 * @param  cClass the class of the page function's fourth parameter
@@ -351,7 +354,8 @@ public interface CollectionRoutes<T, S> {
 		/**
 		 * Adds a route to a collection page function with two extra parameters.
 		 *
-		 * @param  getterThrowableTriFunction the function that calculates the page
+		 * @param  getterThrowableTriFunction the function that calculates the
+		 *         page
 		 * @param  aClass the class of the page function's second parameter
 		 * @param  bClass the class of the page function's third parameter
 		 * @return the updated builder

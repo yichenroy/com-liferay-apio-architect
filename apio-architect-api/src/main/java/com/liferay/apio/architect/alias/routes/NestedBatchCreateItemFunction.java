@@ -26,8 +26,8 @@ import java.util.function.Function;
  * collection item.
  *
  * @author Alejandro Hernández
- * @param  <T> the model identifier's type. It must be a subclass of
- *         {@code Identifier}.
+ * @param  <T> the model identifier's type. It must be a subclass of {@code
+ *         Identifier}.
  * @param  <S> the parent model identifier's type. It must be a subclass of
  *         {@code Identifier}.
  */
