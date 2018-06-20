@@ -145,8 +145,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			String name = customRoute.getName();
 
-			Optional<Form<T>> formOptional = _getFormOptional(
-				formBuilderFunction, name);
+			_calculateForm(customRoute, formBuilderFunction, name);
 
 			_customRoutes.put(name, customRoute);
 
@@ -158,7 +157,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 						t -> new SingleModelImpl<>(
 							t, _getResourceName(supplier))
 					).apply(
-						s, _getModel(formOptional, body)
+						s, _getModel(customRoute.getForm(), body)
 					));
 
 			_customItemFunctions.put(name, customFunction);
@@ -184,8 +183,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			String name = customRoute.getName();
 
-			Optional<Form<T>> formOptional = _getFormOptional(
-				formBuilderFunction, name);
+			_calculateForm(customRoute, formBuilderFunction, name);
 
 			_customRoutes.put(name, customRoute);
 
@@ -199,7 +197,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 						t -> new SingleModelImpl<>(
 							t, _getResourceName(supplier))
 					).apply(
-						s, _getModel(formOptional, body), a, b, c, d
+						s, _getModel(customRoute.getForm(), body), a, b, c, d
 					));
 
 			_customItemFunctions.put(name, customFunction);
@@ -223,8 +221,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			String name = customRoute.getName();
 
-			Optional<Form<T>> formOptional = _getFormOptional(
-				formBuilderFunction, name);
+			_calculateForm(customRoute, formBuilderFunction, name);
 
 			_customRoutes.put(name, customRoute);
 
@@ -237,7 +234,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					(a, b, c) -> throwablePentaFunction.andThen(
 						t -> new SingleModelImpl(t, _getResourceName(supplier))
 					).apply(
-						s, _getModel(formOptional, body), a, b, c
+						s, _getModel(customRoute.getForm(), body), a, b, c
 					));
 
 			_customItemFunctions.put(name, customFunction);
@@ -258,8 +255,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			String name = customRoute.getName();
 
-			Optional<Form<T>> formOptional = _getFormOptional(
-				formBuilderFunction, name);
+			_calculateForm(customRoute, formBuilderFunction, name);
 
 			_customRoutes.put(name, customRoute);
 
@@ -272,7 +268,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 						t -> new SingleModelImpl<>(
 							t, _getResourceName(supplier))
 					).apply(
-						s, _getModel(formOptional, body), a, b
+						s, _getModel(customRoute.getForm(), body), a, b
 					));
 
 			_customItemFunctions.put(name, customFunction);
@@ -292,8 +288,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 
 			String name = customRoute.getName();
 
-			Optional<Form<T>> formOptional = _getFormOptional(
-				formBuilderFunction, name);
+			_calculateForm(customRoute, formBuilderFunction, name);
 
 			_customRoutes.put(name, customRoute);
 
@@ -306,7 +301,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 						t -> new SingleModelImpl<>(
 							t, _getResourceName(supplier))
 					).apply(
-						s, _getModel(formOptional, body), a
+						s, _getModel(customRoute.getForm(), body), a
 					));
 
 			_customItemFunctions.put(name, customFunction);
@@ -659,18 +654,16 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 			return new ItemRoutesImpl<>(this);
 		}
 
-		private Optional<Form<T>> _getFormOptional(
-			FormBuilderFunction<T> formBuilderFunction, String name) {
+		private void _calculateForm(
+			CustomRoute customRoute, FormBuilderFunction<T> formBuilderFunction,
+			String name) {
 
-			if (formBuilderFunction == null) {
-				return Optional.empty();
-			}
-			else {
+			if (formBuilderFunction != null) {
 				Form<T> form = formBuilderFunction.apply(
 					new FormImpl.BuilderImpl<>(
 						Arrays.asList("p", _name, name), _identifierFunction));
 
-				return Optional.of(form);
+				customRoute.setForm(form);
 			}
 		}
 
