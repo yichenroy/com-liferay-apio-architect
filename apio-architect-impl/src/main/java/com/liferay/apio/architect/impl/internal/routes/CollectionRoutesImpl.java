@@ -69,7 +69,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 		_getPageFunction = builderImpl._getPageFunction;
 
 		_customRoutes = builderImpl._customRoutes;
-		_customRouteFunctions = builderImpl._customRouteFunctions;
+		_customPageFunctions = builderImpl._customRouteFunctions;
 	}
 
 	@Override
@@ -79,9 +79,9 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 
 	@Override
 	public Optional<Map<String, CustomPageFunction<?>>>
-		getCustomRouteFunction() {
+		getCustomPageFunctions() {
 
-		return Optional.of(_customRouteFunctions);
+		return Optional.of(_customPageFunctions);
 	}
 
 	@Override
@@ -662,7 +662,7 @@ public class CollectionRoutesImpl<T, S> implements CollectionRoutes<T, S> {
 	}
 
 	private final CreateItemFunction<T> _createItemFunction;
-	private final Map<String, CustomPageFunction<?>> _customRouteFunctions;
+	private final Map<String, CustomPageFunction<?>> _customPageFunctions;
 	private final Map<String, CustomRoute> _customRoutes;
 	private final Form _form;
 	private final GetPageFunction<T> _getPageFunction;
