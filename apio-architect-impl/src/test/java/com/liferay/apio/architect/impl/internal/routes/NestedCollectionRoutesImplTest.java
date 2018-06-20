@@ -19,6 +19,7 @@ import static com.liferay.apio.architect.impl.internal.routes.RoutesTestUtil.IDE
 import static com.liferay.apio.architect.impl.internal.routes.RoutesTestUtil.PAGINATION;
 import static com.liferay.apio.architect.impl.internal.routes.RoutesTestUtil.REQUEST_PROVIDE_FUNCTION;
 import static com.liferay.apio.architect.impl.internal.routes.RoutesTestUtil.hasNestedAddingPermissionFunction;
+import static com.liferay.apio.architect.impl.internal.routes.RoutesTestUtil.keyValueFrom;
 import static com.liferay.apio.architect.impl.internal.unsafe.Unsafe.unsafeCast;
 import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 
@@ -325,16 +326,6 @@ public class NestedCollectionRoutesImplTest {
 		_testNestedCollectionRoutes(nestedCollectionRoutes);
 	}
 
-	private String _getBodyValue() {
-		Optional<String> optional = _singleBody.getValueOptional("key");
-
-		if (!optional.isPresent()) {
-			throw new AssertionError("Body does not contain field: \"key\"");
-		}
-
-		return optional.get();
-	}
-
 	private List<Long> _testAndReturnFourParameterBatchCreatorRoute(
 		Long identifier, List<Map<String, Object>> bodies, String string,
 		Long aLong, Boolean aBoolean, Integer integer) {
@@ -370,8 +361,8 @@ public class NestedCollectionRoutesImplTest {
 
 		assertThat(identifier, is(42L));
 
-		assertThat(bodies.get(0).get("key"), is(_getBodyValue()));
-		assertThat(bodies.get(1).get("key"), is(_getBodyValue()));
+		assertThat(bodies.get(0).get("key"), is(keyValueFrom(_singleBody)));
+		assertThat(bodies.get(1).get("key"), is(keyValueFrom(_singleBody)));
 
 		return Arrays.asList(42L, 42L);
 	}
@@ -381,7 +372,7 @@ public class NestedCollectionRoutesImplTest {
 
 		assertThat(identifier, is(42L));
 
-		assertThat(body.get("key"), is(_getBodyValue()));
+		assertThat(body.get("key"), is(keyValueFrom(_singleBody)));
 
 		return "Apio";
 	}
@@ -503,8 +494,8 @@ public class NestedCollectionRoutesImplTest {
 
 		assertThat(list, hasSize(2));
 
-		assertThat(list.get(0).get("key"), is(_getBodyValue()));
-		assertThat(list.get(1).get("key"), is(_getBodyValue()));
+		assertThat(list.get(0).get("key"), is(keyValueFrom(_singleBody)));
+		assertThat(list.get(1).get("key"), is(keyValueFrom(_singleBody)));
 
 		Optional<NestedBatchCreateItemFunction<Long, Long>>
 			batchCreateItemFunctionOptional =
@@ -554,7 +545,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Map map = (Map)form.get(_singleBody);
 
-		assertThat(map.get("key"), is(_getBodyValue()));
+		assertThat(map.get("key"), is(keyValueFrom(_singleBody)));
 
 		Optional<NestedCreateItemFunction<String, Long>>
 			nestedCreateItemFunctionOptional =
