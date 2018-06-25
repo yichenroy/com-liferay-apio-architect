@@ -71,7 +71,7 @@ public class NestedCollectionRoutesImplTest {
 			"name", "nested", REQUEST_PROVIDE_FUNCTION,
 			__ -> {
 			},
-			__ -> null, IDENTIFIER_FUNCTION);
+			__ -> null, __ -> Optional.empty(), IDENTIFIER_FUNCTION);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.build();
@@ -93,7 +93,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION);
+			__ -> null, __ -> Optional.empty(), IDENTIFIER_FUNCTION);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -119,7 +119,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION);
+			__ -> null, __ -> Optional.empty(), IDENTIFIER_FUNCTION);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -146,7 +146,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION);
+			__ -> null, __ -> Optional.empty(), IDENTIFIER_FUNCTION);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -172,7 +172,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION);
+			__ -> null, __ -> Optional.empty(), IDENTIFIER_FUNCTION);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -199,7 +199,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION);
+			__ -> null, __ -> Optional.empty(), IDENTIFIER_FUNCTION);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -220,7 +220,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION);
+			__ -> null, __ -> Optional.empty(), IDENTIFIER_FUNCTION);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -241,7 +241,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION);
+			__ -> null, __ -> Optional.empty(), IDENTIFIER_FUNCTION);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -265,7 +265,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION);
+			__ -> null, __ -> Optional.empty(), IDENTIFIER_FUNCTION);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -290,7 +290,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION);
+			__ -> null, __ -> Optional.empty(), IDENTIFIER_FUNCTION);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(
@@ -311,7 +311,7 @@ public class NestedCollectionRoutesImplTest {
 
 		Builder<String, Long, Long> builder = new BuilderImpl<>(
 			"name", "nested", REQUEST_PROVIDE_FUNCTION, neededProviders::add,
-			__ -> null, IDENTIFIER_FUNCTION);
+			__ -> null, __ -> Optional.empty(), IDENTIFIER_FUNCTION);
 
 		NestedCollectionRoutes<String, Long, Long> nestedCollectionRoutes =
 			builder.addCreator(

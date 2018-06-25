@@ -166,6 +166,8 @@ public class NestedCollectionRouterManagerImpl
 					name, nestedName, curry(_providerManager::provideMandatory),
 					neededProviders::add,
 					_pathIdentifierMapperManager::mapToIdentifierOrFail,
+					identifier -> _pathIdentifierMapperManager.mapToPath(
+						name, identifier),
 					representor::getIdentifier);
 
 				@SuppressWarnings("unchecked")
