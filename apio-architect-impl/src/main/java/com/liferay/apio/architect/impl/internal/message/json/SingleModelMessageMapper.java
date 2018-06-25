@@ -299,6 +299,19 @@ public interface SingleModelMessageMapper<T>
 	}
 
 	/**
+	 * Maps a resource operation's url to its JSON object representation.
+	 *
+	 * @param singleModelJSONObjectBuilder the JSON object builder for the model
+	 * @param operationJSONObjectBuilder the JSON object builder for the
+	 *        operation
+	 * @param url the operation's url
+	 */
+	public default void mapOperationURL(
+		JSONObjectBuilder singleModelJSONObjectBuilder,
+		JSONObjectBuilder operationJSONObjectBuilder, String url) {
+	}
+
+	/**
 	 * Maps a resource's URL to its JSON object representation.
 	 *
 	 * @param jsonObjectBuilder the JSON object builder for the model

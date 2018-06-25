@@ -606,6 +606,27 @@ public interface PageMessageMapper<T> extends MessageMapper<Page<T>> {
 	}
 
 	/**
+	 * Maps a resource operation's url to its JSON object representation.
+	 *
+	 * @param pageJSONObjectBuilder the JSON object builder for the page
+	 * @param operationJSONObjectBuilder the JSON object builder for the
+	 *        operation
+	 * @param url the operation's url
+	 */
+	public default void mapOperationURL(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder operationJSONObjectBuilder, String url) {
+
+		Optional<SingleModelMessageMapper<T>> optional =
+			getSingleModelMessageMapperOptional();
+
+		optional.ifPresent(
+			singleModelMessageMapper ->
+				singleModelMessageMapper.mapOperationURL(
+					pageJSONObjectBuilder, operationJSONObjectBuilder, url));
+	}
+
+	/**
 	 * Maps the page count to its JSON object representation.
 	 *
 	 * @param jsonObjectBuilder the JSON object builder for the page
