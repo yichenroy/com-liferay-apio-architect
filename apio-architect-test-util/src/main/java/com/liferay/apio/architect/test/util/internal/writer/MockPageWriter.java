@@ -14,7 +14,6 @@
 
 package com.liferay.apio.architect.test.util.internal.writer;
 
-import static com.liferay.apio.architect.operation.HTTPMethod.POST;
 import static com.liferay.apio.architect.test.util.form.MockFormCreator.createForm;
 import static com.liferay.apio.architect.test.util.writer.MockWriterUtil.getRequestInfo;
 
@@ -22,7 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import com.liferay.apio.architect.impl.internal.message.json.PageMessageMapper;
-import com.liferay.apio.architect.impl.internal.operation.OperationImpl;
+import com.liferay.apio.architect.impl.internal.operation.CreateOperation;
 import com.liferay.apio.architect.impl.internal.pagination.PageImpl;
 import com.liferay.apio.architect.impl.internal.pagination.PaginationImpl;
 import com.liferay.apio.architect.impl.internal.request.RequestInfo;
@@ -78,7 +77,7 @@ public class MockPageWriter {
 		Path path = new Path("name", "id");
 
 		List<Operation> operations = Collections.singletonList(
-			new OperationImpl(createForm("c", "p"), POST, "create-operation"));
+			new CreateOperation(createForm("c", "p"), "resource"));
 
 		Page<RootModel> page = new PageImpl<>(
 			"root", pageItems, pagination, path, operations);

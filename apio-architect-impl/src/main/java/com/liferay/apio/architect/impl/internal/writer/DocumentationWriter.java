@@ -14,24 +14,20 @@
 
 package com.liferay.apio.architect.impl.internal.writer;
 
-import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
-import static com.liferay.apio.architect.operation.HTTPMethod.GET;
-import static com.liferay.apio.architect.operation.HTTPMethod.POST;
-import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
-
 import com.google.gson.JsonObject;
 
 import com.liferay.apio.architect.alias.representor.FieldFunction;
 import com.liferay.apio.architect.alias.representor.NestedFieldFunction;
 import com.liferay.apio.architect.consumer.TriConsumer;
 import com.liferay.apio.architect.form.Form;
-import com.liferay.apio.architect.form.FormField;
 import com.liferay.apio.architect.impl.internal.documentation.Documentation;
 import com.liferay.apio.architect.impl.internal.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.impl.internal.message.json.JSONObjectBuilder;
-import com.liferay.apio.architect.impl.internal.operation.OperationImpl;
+import com.liferay.apio.architect.impl.internal.operation.CreateOperation;
+import com.liferay.apio.architect.impl.internal.operation.DeleteOperation;
+import com.liferay.apio.architect.impl.internal.operation.RetrieveOperation;
+import com.liferay.apio.architect.impl.internal.operation.UpdateOperation;
 import com.liferay.apio.architect.impl.internal.request.RequestInfo;
-import com.liferay.apio.architect.operation.HTTPMethod;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.related.RelatedCollection;
 import com.liferay.apio.architect.related.RelatedModel;
@@ -268,22 +264,6 @@ public class DocumentationWriter {
 		return Stream.concat(fieldNamesStream, nestedFieldNamesStream);
 	}
 
-	private Optional<FormField> _getFormField(
-		String fieldName, Form<FormField> formFieldForm) {
-
-		List<FormField> formFields = formFieldForm.getFormFields();
-
-		Stream<FormField> stream = formFields.stream();
-
-		return stream.filter(
-			formField -> {
-				String name = formField.getName();
-
-				return name.equals(fieldName);
-			}
-		).findFirst();
-	}
-
 	private Optional<String> _getNestedCollectionRouteOptional(
 		Map<String, Representor> representorMap, Map<String, ?> nestedRoutesMap,
 		String name) {
@@ -302,17 +282,6 @@ public class DocumentationWriter {
 		).map(
 			routes -> routes[1]
 		).findFirst();
-	}
-
-	private Operation _getOperation(
-		String operationName, Optional<Form> formOptional,
-		HTTPMethod httpMethod) {
-
-		return formOptional.map(
-			form -> new OperationImpl(form, httpMethod, operationName)
-		).orElse(
-			new OperationImpl(httpMethod, operationName)
-		);
 	}
 
 	private void _writeAllFields(
@@ -381,26 +350,24 @@ public class DocumentationWriter {
 			itemRoutesMap.getOrDefault(name, null)
 		).ifPresent(
 			itemRoutes -> {
-				String getOperationName = name + "/retrieve";
-
-				Operation getOperation = new OperationImpl(
-					GET, getOperationName, false);
+				RetrieveOperation retrieveOperation = new RetrieveOperation(
+					name, false);
 
 				_writeOperation(
-					getOperation, resourceJsonObjectBuilder, name, type);
+					retrieveOperation, resourceJsonObjectBuilder, name, type);
 
-				String updateOperationName = name + "/update";
+				Optional<Form> optional = itemRoutes.getFormOptional();
 
-				Operation updateOperation = _getOperation(
-					updateOperationName, itemRoutes.getFormOptional(), PUT);
+				UpdateOperation updateOperation = optional.map(
+					form -> new UpdateOperation(form, name)
+				).orElse(
+					new UpdateOperation(null, name)
+				);
 
 				_writeOperation(
 					updateOperation, resourceJsonObjectBuilder, name, type);
 
-				String deleteOperationName = name + "/delete";
-
-				Operation deleteOperation = new OperationImpl(
-					DELETE, deleteOperationName);
+				DeleteOperation deleteOperation = new DeleteOperation(name);
 
 				_writeOperation(
 					deleteOperation, resourceJsonObjectBuilder, name, type);
@@ -436,13 +403,16 @@ public class DocumentationWriter {
 		).ifPresent(
 			collectionRoutes -> {
 				_writeOperation(
-					new OperationImpl(GET, resource, true),
+					new RetrieveOperation(resource, true),
 					resourceJsonObjectBuilder, resource, type);
 
-				String operationName = resource + "/create";
+				Optional<Form> optional = collectionRoutes.getFormOptional();
 
-				Operation createOperation = _getOperation(
-					operationName, collectionRoutes.getFormOptional(), POST);
+				CreateOperation createOperation = optional.map(
+					form -> new CreateOperation(form, resource)
+				).orElse(
+					new CreateOperation(null, resource)
+				);
 
 				_writeOperation(
 					createOperation, resourceJsonObjectBuilder, resource, type);

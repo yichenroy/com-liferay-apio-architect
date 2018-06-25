@@ -298,7 +298,7 @@
 	"numberOfItems": 3,
 	"operation": [
 		{
-			"@id": "_:create-operation",
+			"@id": "_:resource/create",
 			"@type": "Operation",
 			"expects": "localhost/f/c/p",
 			"method": "POST"

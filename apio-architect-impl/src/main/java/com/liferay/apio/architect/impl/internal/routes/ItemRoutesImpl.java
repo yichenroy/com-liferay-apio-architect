@@ -16,8 +16,6 @@ package com.liferay.apio.architect.impl.internal.routes;
 
 import static com.liferay.apio.architect.impl.internal.routes.RoutesBuilderUtil.provide;
 import static com.liferay.apio.architect.impl.internal.routes.RoutesBuilderUtil.provideConsumer;
-import static com.liferay.apio.architect.operation.HTTPMethod.DELETE;
-import static com.liferay.apio.architect.operation.HTTPMethod.PUT;
 
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.alias.form.FormBuilderFunction;
@@ -42,7 +40,8 @@ import com.liferay.apio.architect.function.throwable.ThrowableTriFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.impl.internal.alias.ProvideFunction;
 import com.liferay.apio.architect.impl.internal.form.FormImpl;
-import com.liferay.apio.architect.impl.internal.operation.OperationImpl;
+import com.liferay.apio.architect.impl.internal.operation.DeleteOperation;
+import com.liferay.apio.architect.impl.internal.operation.UpdateOperation;
 import com.liferay.apio.architect.impl.internal.single.model.SingleModelImpl;
 import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.routes.ItemRoutes;
@@ -477,8 +476,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					false
 				)
 			).ifPresent(
-				__ -> operations.add(
-					new OperationImpl(DELETE, _name + "/delete"))
+				__ -> operations.add(new DeleteOperation(_name))
 			);
 
 			Optional.ofNullable(
@@ -490,8 +488,7 @@ public class ItemRoutesImpl<T, S> implements ItemRoutes<T, S> {
 					false
 				)
 			).ifPresent(
-				__ -> operations.add(
-					new OperationImpl(_form, PUT, _name + "/update"))
+				__ -> operations.add(new UpdateOperation(_form, _name))
 			);
 
 			return operations;
