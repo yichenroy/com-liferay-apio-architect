@@ -18,6 +18,7 @@ import static com.liferay.apio.architect.impl.internal.url.URLCreator.createColl
 import static com.liferay.apio.architect.impl.internal.url.URLCreator.createCollectionURL;
 import static com.liferay.apio.architect.impl.internal.url.URLCreator.createFormURL;
 import static com.liferay.apio.architect.impl.internal.url.URLCreator.createNestedCollectionURL;
+import static com.liferay.apio.architect.impl.internal.url.URLCreator.createOperationURL;
 import static com.liferay.apio.architect.impl.internal.writer.util.WriterUtil.getFieldsWriter;
 import static com.liferay.apio.architect.impl.internal.writer.util.WriterUtil.getPathOptional;
 
@@ -120,30 +121,37 @@ public class PageWriter<T> {
 
 		List<Operation> operations = _page.getOperations();
 
-		operations.forEach(
-			operation -> {
-				JSONObjectBuilder operationJSONObjectBuilder =
-					new JSONObjectBuilder();
+		for (Operation operation : operations) {
+			JSONObjectBuilder operationJSONObjectBuilder =
+				new JSONObjectBuilder();
 
-				_pageMessageMapper.onStartOperation(
-					_jsonObjectBuilder, operationJSONObjectBuilder, operation);
+			_pageMessageMapper.onStartOperation(
+				_jsonObjectBuilder, operationJSONObjectBuilder, operation);
 
-				Optional<Form> formOptional = operation.getFormOptional();
+			Optional<String> operationURLOptional = createOperationURL(
+				_requestInfo.getServerURL(), operation);
 
-				formOptional.map(
-					form -> createFormURL(_requestInfo.getServerURL(), form)
-				).ifPresent(
-					formURL -> _pageMessageMapper.mapOperationFormURL(
-						_jsonObjectBuilder, operationJSONObjectBuilder, formURL)
-				);
-
-				_pageMessageMapper.mapOperationMethod(
+			operationURLOptional.ifPresent(
+				operationURL -> _pageMessageMapper.mapOperationURL(
 					_jsonObjectBuilder, operationJSONObjectBuilder,
-					operation.getHttpMethod());
+					operationURL));
 
-				_pageMessageMapper.onFinishOperation(
-					_jsonObjectBuilder, operationJSONObjectBuilder, operation);
-			});
+			Optional<Form> formOptional = operation.getFormOptional();
+
+			formOptional.map(
+				form -> createFormURL(_requestInfo.getServerURL(), form)
+			).ifPresent(
+				formURL -> _pageMessageMapper.mapOperationFormURL(
+					_jsonObjectBuilder, operationJSONObjectBuilder, formURL)
+			);
+
+			_pageMessageMapper.mapOperationMethod(
+				_jsonObjectBuilder, operationJSONObjectBuilder,
+				operation.getHttpMethod());
+
+			_pageMessageMapper.onFinishOperation(
+				_jsonObjectBuilder, operationJSONObjectBuilder, operation);
+		}
 
 		_pageMessageMapper.onFinish(
 			_jsonObjectBuilder, _page, _requestInfo.getHttpHeaders());

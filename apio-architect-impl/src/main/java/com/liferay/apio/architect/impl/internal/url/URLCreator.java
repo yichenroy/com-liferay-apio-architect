@@ -15,11 +15,18 @@
 package com.liferay.apio.architect.impl.internal.url;
 
 import com.liferay.apio.architect.form.Form;
+import com.liferay.apio.architect.impl.internal.operation.CreateOperation;
+import com.liferay.apio.architect.impl.internal.operation.DeleteOperation;
+import com.liferay.apio.architect.impl.internal.operation.RetrieveOperation;
+import com.liferay.apio.architect.impl.internal.operation.UpdateOperation;
 import com.liferay.apio.architect.impl.internal.pagination.PageType;
+import com.liferay.apio.architect.operation.Operation;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.uri.Path;
 
 import java.net.URI;
+
+import java.util.Optional;
 
 import javax.ws.rs.core.UriBuilder;
 
@@ -126,6 +133,44 @@ public final class URLCreator {
 		ServerURL serverURL, Path path, String name) {
 
 		return String.join("/", serverURL.get(), "p", path.asURI(), name);
+	}
+
+	/**
+	 * Returns the URL for an operation
+	 *
+	 * @param  serverURL the server URL
+	 * @param  operation the operation to represent
+	 * @return the operation URL
+	 * @review
+	 */
+	public static Optional<String> createOperationURL(
+		ServerURL serverURL, Operation operation) {
+
+		Optional<String> optional = operation.getURIOptional();
+
+		return optional.map(
+			uri -> {
+				if (operation instanceof CreateOperation) {
+					return "p/" + uri;
+				}
+
+				if (operation instanceof DeleteOperation) {
+					return "p/" + uri;
+				}
+
+				if (operation instanceof UpdateOperation) {
+					return "p/" + uri;
+				}
+
+				if (operation instanceof RetrieveOperation) {
+					return "p/" + uri;
+				}
+
+				return null;
+			}
+		).map(
+			uri -> serverURL.get() + "/" + uri
+		);
 	}
 
 	/**

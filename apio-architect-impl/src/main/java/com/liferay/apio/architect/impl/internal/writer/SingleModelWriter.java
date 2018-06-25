@@ -15,6 +15,7 @@
 package com.liferay.apio.architect.impl.internal.writer;
 
 import static com.liferay.apio.architect.impl.internal.url.URLCreator.createFormURL;
+import static com.liferay.apio.architect.impl.internal.url.URLCreator.createOperationURL;
 import static com.liferay.apio.architect.impl.internal.writer.util.WriterUtil.getFieldsWriter;
 import static com.liferay.apio.architect.impl.internal.writer.util.WriterUtil.getPathOptional;
 
@@ -160,30 +161,36 @@ public class SingleModelWriter<T> {
 
 		List<Operation> operations = _singleModel.getOperations();
 
-		operations.forEach(
-			operation -> {
-				JSONObjectBuilder operationJSONObjectBuilder =
-					new JSONObjectBuilder();
+		for (Operation operation : operations) {
+			JSONObjectBuilder operationJSONObjectBuilder =
+				new JSONObjectBuilder();
 
-				_singleModelMessageMapper.onStartOperation(
-					_jsonObjectBuilder, operationJSONObjectBuilder, operation);
+			_singleModelMessageMapper.onStartOperation(
+				_jsonObjectBuilder, operationJSONObjectBuilder, operation);
 
-				Optional<Form> formOptional = operation.getFormOptional();
+			Optional<String> urlOptional = createOperationURL(
+				_requestInfo.getServerURL(), operation);
 
-				formOptional.map(
-					form -> createFormURL(_requestInfo.getServerURL(), form)
-				).ifPresent(
-					url -> _singleModelMessageMapper.mapOperationFormURL(
-						_jsonObjectBuilder, operationJSONObjectBuilder, url)
-				);
+			urlOptional.ifPresent(
+				url -> _singleModelMessageMapper.mapOperationURL(
+					_jsonObjectBuilder, operationJSONObjectBuilder, url));
 
-				_singleModelMessageMapper.mapOperationMethod(
-					_jsonObjectBuilder, operationJSONObjectBuilder,
-					operation.getHttpMethod());
+			Optional<Form> formOptional = operation.getFormOptional();
 
-				_singleModelMessageMapper.onFinishOperation(
-					_jsonObjectBuilder, operationJSONObjectBuilder, operation);
-			});
+			formOptional.map(
+				form -> createFormURL(_requestInfo.getServerURL(), form)
+			).ifPresent(
+				url -> _singleModelMessageMapper.mapOperationFormURL(
+					_jsonObjectBuilder, operationJSONObjectBuilder, url)
+			);
+
+			_singleModelMessageMapper.mapOperationMethod(
+				_jsonObjectBuilder, operationJSONObjectBuilder,
+				operation.getHttpMethod());
+
+			_singleModelMessageMapper.onFinishOperation(
+				_jsonObjectBuilder, operationJSONObjectBuilder, operation);
+		}
 
 		fieldsWriter.writeRelatedModels(
 			singleModel -> getPathOptional(
