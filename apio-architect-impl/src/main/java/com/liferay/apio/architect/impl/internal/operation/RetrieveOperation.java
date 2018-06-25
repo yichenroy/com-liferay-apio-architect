@@ -21,46 +21,30 @@ import com.liferay.apio.architect.operation.Operation;
 import java.util.Optional;
 
 /**
+ * Represents a resource retrieve operation.
+ *
  * @author Alejandro Hernández
  */
-public class OperationImpl implements Operation {
+public class RetrieveOperation implements Operation {
 
-	public OperationImpl(Form form, HTTPMethod httpMethod, String name) {
-		this(form, httpMethod, name, false);
-	}
-
-	public OperationImpl(
-		Form form, HTTPMethod httpMethod, String name, boolean collection) {
-
-		_form = form;
-		_httpMethod = httpMethod;
-		_name = name;
+	public RetrieveOperation(String resourceName, boolean collection) {
+		_resourceName = resourceName;
 		_collection = collection;
-	}
-
-	public OperationImpl(HTTPMethod httpMethod, String name) {
-		this(null, httpMethod, name, false);
-	}
-
-	public OperationImpl(
-		HTTPMethod httpMethod, String name, boolean collection) {
-
-		this(null, httpMethod, name, collection);
 	}
 
 	@Override
 	public Optional<Form> getFormOptional() {
-		return Optional.ofNullable(_form);
+		return Optional.empty();
 	}
 
 	@Override
 	public HTTPMethod getHttpMethod() {
-		return _httpMethod;
+		return HTTPMethod.GET;
 	}
 
 	@Override
 	public String getName() {
-		return _name;
+		return _resourceName + "/retrieve";
 	}
 
 	@Override
@@ -69,8 +53,6 @@ public class OperationImpl implements Operation {
 	}
 
 	private final boolean _collection;
-	private final Form _form;
-	private final HTTPMethod _httpMethod;
-	private final String _name;
+	private final String _resourceName;
 
 }

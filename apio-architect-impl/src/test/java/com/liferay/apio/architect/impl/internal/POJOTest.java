@@ -16,7 +16,6 @@ package com.liferay.apio.architect.impl.internal;
 
 import static com.openpojo.reflection.impl.PojoClassFactory.getPojoClass;
 
-import com.liferay.apio.architect.impl.internal.operation.OperationImpl;
 import com.liferay.apio.architect.impl.internal.related.RelatedCollectionImpl;
 import com.liferay.apio.architect.impl.internal.related.RelatedModelImpl;
 
@@ -59,11 +58,6 @@ public class POJOTest {
 	public void testIdentifier() {
 		_validator.validate(getPojoClass(RelatedCollectionImpl.class));
 		_validator.validate(getPojoClass(RelatedModelImpl.class));
-	}
-
-	@Test
-	public void testOperationImpl() {
-		_validator.validate(getPojoClass(OperationImpl.class));
 	}
 
 	private Validator _validator;
