@@ -24,6 +24,7 @@ import com.liferay.apio.architect.form.Body;
 import com.liferay.apio.architect.impl.internal.alias.ProvideFunction;
 import com.liferay.apio.architect.impl.internal.pagination.PaginationImpl;
 import com.liferay.apio.architect.pagination.Pagination;
+import com.liferay.apio.architect.uri.Path;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,6 +80,13 @@ public class RoutesTestUtil {
 	 * @review
 	 */
 	public static final Function<String, Long> IDENTIFIER_FUNCTION = __ -> 42L;
+
+	/**
+	 * An identifier to {@link Path} function that returns an {@link Optional}
+	 * containing a {@code Path("name", "id")}.
+	 */
+	public static final Function<Long, Optional<Path>>
+		IDENTIFIER_TO_PATH_FUNCTION = __ -> Optional.of(new Path("name", "id"));
 
 	/**
 	 * A mock {@code Pagination} object.

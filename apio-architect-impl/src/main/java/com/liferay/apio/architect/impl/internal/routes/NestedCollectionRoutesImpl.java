@@ -97,7 +97,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 			String name, String nestedName, ProvideFunction provideFunction,
 			Consumer<String> neededProviderConsumer,
 			Function<Path, ?> pathToIdentifierFunction,
-			Function<S, Optional<Path>> identifierToPathFunction,
+			Function<U, Optional<Path>> identifierToPathFunction,
 			Function<T, S> modelToIdentifierFunction) {
 
 			_name = name;
@@ -570,24 +570,31 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		private List<Operation> _getOperations(
 			Credentials credentials, U identifier) {
 
-			return Optional.ofNullable(
-				_form
-			).filter(
-				__ -> Try.fromFallible(
-					() -> _hasNestedAddingPermissionFunction.apply(
-						credentials, identifier)
-				).orElse(
-					false
-				)
-			).map(
-				form -> new CreateOperation(form, _name + "/" + _nestedName)
-			).map(
-				Operation.class::cast
-			).map(
-				Collections::singletonList
-			).orElseGet(
-				Collections::emptyList
+			Optional<Path> optional = _identifierToPathFunction.apply(
+				identifier);
+
+			if (!optional.isPresent()) {
+				return Collections.emptyList();
+			}
+
+			Path path = optional.get();
+
+			Boolean canAdd = Try.fromFallible(
+				() -> _hasNestedAddingPermissionFunction.apply(
+					credentials, identifier)
+			).orElse(
+				false
 			);
+
+			if (!canAdd) {
+				return Collections.emptyList();
+			}
+
+			CreateOperation createOperation = new CreateOperation(
+				_form, _name + "/" + _nestedName,
+				path.asURI() + "/" + _nestedName);
+
+			return Collections.singletonList(createOperation);
 		}
 
 		private <V> List<S> _transformList(
@@ -613,7 +620,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 		private Form _form;
 		private ThrowableBiFunction<Credentials, U, Boolean>
 			_hasNestedAddingPermissionFunction;
-		private final Function<S, Optional<Path>> _identifierToPathFunction;
+		private final Function<U, Optional<Path>> _identifierToPathFunction;
 		private final Function<T, S> _modelToIdentifierFunction;
 		private final String _name;
 		private final Consumer<String> _neededProviderConsumer;
