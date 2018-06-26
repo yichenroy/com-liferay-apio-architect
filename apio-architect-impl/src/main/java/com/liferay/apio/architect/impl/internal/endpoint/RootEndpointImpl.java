@@ -77,12 +77,10 @@ public class RootEndpointImpl implements RootEndpoint {
 		).mapOptional(
 			CollectionRoutes::getBatchCreateItemFunctionOptional,
 			notAllowed(POST, name)
+		).map(
+			function -> function.apply(_httpServletRequest)
 		).flatMap(
-			function -> function.apply(
-				_httpServletRequest
-			).apply(
-				body
-			)
+			function -> function.apply(body)
 		);
 	}
 
@@ -165,13 +163,12 @@ public class RootEndpointImpl implements RootEndpoint {
 			_itemRouterManager::getItemRoutesOptional
 		).mapOptional(
 			ItemRoutes::getItemFunctionOptional, notFound(name, id)
+		).map(
+			function -> function.apply(_httpServletRequest)
 		).flatMap(
 			function -> function.apply(
-				_httpServletRequest
-			).apply(
 				_pathIdentifierMapperManager.mapToIdentifierOrFail(
-					new Path(name, id))
-			)
+					new Path(name, id)))
 		);
 	}
 

@@ -120,9 +120,9 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 			function -> function.apply(_httpServletRequest)
 		).getUnchecked();
 
-		Path path = new Path(_name, id);
+		S s = _pathToIdentifierFunction.apply(new Path(_name, id));
 
-		throwableConsumer.accept(_pathToIdentifierFunction.apply(path));
+		throwableConsumer.accept(s);
 
 		return noContent().build();
 	}
@@ -178,16 +178,14 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		).mapOptional(
 			ItemRoutes::getUpdateItemFunctionOptional,
 			notAllowed(PUT, _name, id)
+		).map(
+			function -> function.apply(_httpServletRequest)
+		).map(
+			function -> function.compose(_pathToIdentifierFunction)
+		).map(
+			function -> function.apply(new Path(_name, id))
 		).flatMap(
-			function -> function.apply(
-				_httpServletRequest
-			).compose(
-				_pathToIdentifierFunction
-			).apply(
-				new Path(_name, id)
-			).apply(
-				body
-			)
+			function -> function.apply(body)
 		);
 	}
 
