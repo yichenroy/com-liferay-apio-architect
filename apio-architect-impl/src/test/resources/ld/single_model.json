@@ -56,7 +56,7 @@
 		"operation": [
 			{
 				"@id": "_:resource/delete",
-				"@type": "Operation",
+				"@type": ["vocab:DeleteAction", "Operation"],
 				"method": "DELETE"
 			}
 		],
@@ -95,12 +95,12 @@
 	"operation": [
 		{
 			"@id": "_:resource/delete",
-			"@type": "Operation",
+			"@type": ["vocab:DeleteAction", "Operation"],
 			"method": "DELETE"
 		},
 		{
 			"@id": "_:resource/update",
-			"@type": "Operation",
+			"@type": ["vocab:UpdateAction", "Operation"],
 			"expects": "localhost/f/u/r",
 			"method": "PUT"
 		}

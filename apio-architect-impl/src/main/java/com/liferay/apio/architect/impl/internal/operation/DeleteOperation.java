@@ -21,9 +21,9 @@ import com.liferay.apio.architect.operation.Operation;
 import java.util.Optional;
 
 /**
- * Represents a resource delete operation.
- *  *
- *  * @author Alejandro Hernández
+ * Represents a resource delete operation. * * @author Alejandro Hernández
+ *
+ * @author Brian Wing Shun Chan
  */
 public class DeleteOperation implements Operation {
 

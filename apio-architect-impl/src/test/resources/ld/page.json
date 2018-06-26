@@ -299,7 +299,7 @@
 	"operation": [
 		{
 			"@id": "_:resource/create",
-			"@type": "Operation",
+			"@type": ["vocab:AddAction", "Operation"],
 			"expects": "localhost/f/c/p",
 			"method": "POST"
 		}
