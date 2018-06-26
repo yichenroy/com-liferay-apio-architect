@@ -33,5 +33,5 @@ import java.util.function.Function;
  */
 @FunctionalInterface
 public interface NestedBatchCreateItemFunction<T, S>
-	extends RequestFunction<Function<S, Function<Body, Try<BatchResult<T>>>>> {
+	extends RequestFunction<Function<Body, Function<S, Try<BatchResult<T>>>>> {
 }

@@ -156,7 +156,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					));
 
 			_nestedBatchCreateItemFunction =
-				httpServletRequest -> identifier -> body -> Try.fromFallible(
+				httpServletRequest -> body -> identifier -> Try.fromFallible(
 					() -> batchCreatorThrowableBiFunction.andThen(
 						t -> new BatchResult<>(t, _nestedName)
 					).apply(
@@ -226,7 +226,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					));
 
 			_nestedBatchCreateItemFunction =
-				httpServletRequest -> identifier -> body -> provide(
+				httpServletRequest -> body -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					cClass, dClass,
 					(a, b, c, d) -> batchCreatorThrowableHexaFunction.andThen(
@@ -297,7 +297,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					));
 
 			_nestedBatchCreateItemFunction =
-				httpServletRequest -> identifier -> body -> provide(
+				httpServletRequest -> body -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					cClass,
 					(a, b, c) -> batchCreatorThrowablePentaFunction.andThen(
@@ -363,7 +363,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					));
 
 			_nestedBatchCreateItemFunction =
-				httpServletRequest -> identifier -> body -> provide(
+				httpServletRequest -> body -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest), aClass, bClass,
 					(a, b) -> batchCreatorThrowableTetraFunction.andThen(
 						t -> new BatchResult<>(t, _nestedName)
@@ -426,7 +426,7 @@ public class NestedCollectionRoutesImpl<T, S, U>
 					));
 
 			_nestedBatchCreateItemFunction =
-				httpServletRequest -> identifier -> body -> provide(
+				httpServletRequest -> body -> identifier -> provide(
 					_provideFunction.apply(httpServletRequest), aClass,
 					a -> batchCreatorThrowableTriFunction.andThen(
 						t -> new BatchResult<>(t, _nestedName)

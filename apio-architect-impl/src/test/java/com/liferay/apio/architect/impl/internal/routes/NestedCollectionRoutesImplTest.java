@@ -515,12 +515,10 @@ public class NestedCollectionRoutesImplTest {
 		BatchResult<Long> batchResult = nestedBatchCreateItemFunction.apply(
 			null
 		).apply(
-			42L
-		).andThen(
-			Try::getUnchecked
-		).apply(
 			_batchBody
-		);
+		).apply(
+			42L
+		).getUnchecked();
 
 		assertThat(batchResult.resourceName, is("nested"));
 
