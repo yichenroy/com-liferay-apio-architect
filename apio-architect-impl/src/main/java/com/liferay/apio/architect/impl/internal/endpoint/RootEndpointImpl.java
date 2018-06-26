@@ -34,6 +34,7 @@ import com.liferay.apio.architect.impl.internal.wiring.osgi.manager.uri.mapper.P
 import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.routes.CollectionRoutes;
 import com.liferay.apio.architect.routes.ItemRoutes;
+import com.liferay.apio.architect.routes.NestedCollectionRoutes;
 import com.liferay.apio.architect.single.model.SingleModel;
 import com.liferay.apio.architect.uri.Path;
 
@@ -99,7 +100,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		return new FormEndpoint(
 			this::_getCollectionRoutesOrFail,
 			_itemRouterManager::getItemRoutesOptional,
-			_nestedCollectionRouterManager::getNestedCollectionRoutesOptional);
+			this::_getNestedCollectionRoutesOrFail);
 	}
 
 	@Override
@@ -141,8 +142,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			() -> _getCollectionRoutesOrFail(name),
 			() -> _getRepresentorOrFail(name),
 			() -> _itemRouterManager.getItemRoutesOptional(name),
-			nestedName -> _nestedCollectionRouterManager.
-				getNestedCollectionRoutesOptional(name, nestedName),
+			nestedName -> _getNestedCollectionRoutesOrFail(name, nestedName),
 			_pathIdentifierMapperManager::mapToIdentifierOrFail);
 	}
 
@@ -153,6 +153,16 @@ public class RootEndpointImpl implements RootEndpoint {
 			_collectionRouterManager.getCollectionRoutesOptional(name);
 
 		return optional.orElseThrow(notFound(name));
+	}
+
+	private NestedCollectionRoutes<Object, Object, Object>
+		_getNestedCollectionRoutesOrFail(String name, String nestedName) {
+
+		Optional<NestedCollectionRoutes<Object, Object, Object>> optional =
+			_nestedCollectionRouterManager.getNestedCollectionRoutesOptional(
+				name, nestedName);
+
+		return optional.orElseThrow(notFound(name, "{id}", nestedName));
 	}
 
 	private Representor<Object> _getRepresentorOrFail(String name) {

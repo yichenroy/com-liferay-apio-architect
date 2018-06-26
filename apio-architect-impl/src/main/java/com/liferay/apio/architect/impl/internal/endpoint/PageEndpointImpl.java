@@ -25,6 +25,7 @@ import static javax.ws.rs.core.Response.noContent;
 import com.liferay.apio.architect.alias.IdentifierFunction;
 import com.liferay.apio.architect.consumer.throwable.ThrowableConsumer;
 import com.liferay.apio.architect.form.Body;
+import com.liferay.apio.architect.function.throwable.ThrowableFunction;
 import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.pagination.Page;
 import com.liferay.apio.architect.representor.Representor;
@@ -55,7 +56,7 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 		ThrowableSupplier<CollectionRoutes<T, S>> collectionRoutesSupplier,
 		ThrowableSupplier<Representor<T>> representorSupplier,
 		Supplier<Optional<ItemRoutes<T, S>>> itemRoutesSupplier,
-		Function<String, Optional<NestedCollectionRoutes<T, S, Object>>>
+		ThrowableFunction<String, NestedCollectionRoutes<T, S, Object>>
 			nestedCollectionRoutesFunction,
 		IdentifierFunction<S> pathToIdentifierFunction) {
 
@@ -87,9 +88,8 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	public Try<SingleModel<T>> addNestedCollectionItem(
 		String id, String nestedName, Body body) {
 
-		return Try.fromOptional(
-			() -> _nestedCollectionRoutesFunction.apply(nestedName),
-			notFound(_name, nestedName)
+		return Try.fromFallible(
+			() -> _nestedCollectionRoutesFunction.apply(nestedName)
 		).mapOptional(
 			NestedCollectionRoutes::getNestedCreateItemFunctionOptional
 		).map(
@@ -147,9 +147,8 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	public Try<Page<T>> getNestedCollectionPageTry(
 		String id, String nestedName) {
 
-		return Try.fromOptional(
-			() -> _nestedCollectionRoutesFunction.apply(nestedName),
-			notFound(_name, id, nestedName)
+		return Try.fromFallible(
+			() -> _nestedCollectionRoutesFunction.apply(nestedName)
 		).map(
 			NestedCollectionRoutes::getNestedGetPageFunctionOptional
 		).map(
@@ -202,8 +201,9 @@ public class PageEndpointImpl<T, S> implements PageEndpoint<T> {
 	private final HttpServletRequest _httpServletRequest;
 	private final Supplier<Optional<ItemRoutes<T, S>>> _itemRoutesSupplier;
 	private final String _name;
-	private final Function<String, Optional<NestedCollectionRoutes
-		<T, S, Object>>> _nestedCollectionRoutesFunction;
+	private final ThrowableFunction
+		<String, NestedCollectionRoutes<T, S, Object>>
+			_nestedCollectionRoutesFunction;
 	private final IdentifierFunction<S> _pathToIdentifierFunction;
 	private final ThrowableSupplier<Representor<T>> _representorSupplier;
 	private final Function<String, Try<SingleModel<T>>> _singleModelFunction;
