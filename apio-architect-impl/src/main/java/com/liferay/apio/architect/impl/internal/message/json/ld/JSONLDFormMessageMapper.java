@@ -14,23 +14,6 @@
 
 package com.liferay.apio.architect.impl.internal.message.json.ld;
 
-import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_CONTEXT;
-import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_DESCRIPTION;
-import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_ID;
-import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_PROPERTY;
-import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_READABLE;
-import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_REQUIRED;
-import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_SUPPORTED_PROPERTY;
-import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_TITLE;
-import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_TYPE;
-import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_VOCAB;
-import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.FIELD_NAME_WRITEABLE;
-import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.MEDIA_TYPE;
-import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.TYPE_CLASS;
-import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.TYPE_SUPPORTED_PROPERTY;
-import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.URL_HYDRA_PROFILE;
-import static com.liferay.apio.architect.impl.internal.message.json.ld.JSONLDConstants.URL_SCHEMA_ORG;
-
 import com.liferay.apio.architect.form.Form;
 import com.liferay.apio.architect.form.FormField;
 import com.liferay.apio.architect.impl.internal.message.json.FormMessageMapper;
@@ -55,7 +38,7 @@ public class JSONLDFormMessageMapper implements FormMessageMapper {
 
 	@Override
 	public String getMediaType() {
-		return MEDIA_TYPE;
+		return "application/ld+json";
 	}
 
 	@Override
@@ -63,7 +46,7 @@ public class JSONLDFormMessageMapper implements FormMessageMapper {
 		JSONObjectBuilder jsonObjectBuilder, String description) {
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_DESCRIPTION
+			"description"
 		).stringValue(
 			description
 		);
@@ -74,36 +57,36 @@ public class JSONLDFormMessageMapper implements FormMessageMapper {
 		JSONObjectBuilder jsonObjectBuilder, FormField formField) {
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_SUPPORTED_PROPERTY
+			"supportedProperty"
 		).arrayValue(
 		).add(
 			builder -> {
 				builder.field(
-					FIELD_NAME_TYPE
+					"@type"
 				).stringValue(
-					TYPE_SUPPORTED_PROPERTY
+					"SupportedProperty"
 				);
 
 				builder.field(
-					FIELD_NAME_PROPERTY
+					"property"
 				).stringValue(
 					formField.getName()
 				);
 
 				builder.field(
-					FIELD_NAME_READABLE
+					"readable"
 				).booleanValue(
 					false
 				);
 
 				builder.field(
-					FIELD_NAME_REQUIRED
+					"required"
 				).booleanValue(
 					formField.isRequired()
 				);
 
 				builder.field(
-					FIELD_NAME_WRITEABLE
+					"writeable"
 				).booleanValue(
 					true
 				);
@@ -116,7 +99,7 @@ public class JSONLDFormMessageMapper implements FormMessageMapper {
 		JSONObjectBuilder jsonObjectBuilder, String title) {
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_TITLE
+			"title"
 		).stringValue(
 			title
 		);
@@ -125,7 +108,7 @@ public class JSONLDFormMessageMapper implements FormMessageMapper {
 	@Override
 	public void mapFormURL(JSONObjectBuilder jsonObjectBuilder, String url) {
 		jsonObjectBuilder.field(
-			FIELD_NAME_ID
+			"@id"
 		).stringValue(
 			url
 		);
@@ -137,21 +120,22 @@ public class JSONLDFormMessageMapper implements FormMessageMapper {
 		HttpHeaders httpHeaders) {
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_TYPE
+			"@type"
 		).stringValue(
-			TYPE_CLASS
+			"Class"
 		);
 
 		jsonObjectBuilder.field(
-			FIELD_NAME_CONTEXT
+			"@context"
 		).arrayValue(
 			arrayBuilder -> arrayBuilder.add(
 				builder -> builder.field(
-					FIELD_NAME_VOCAB
+					"@vocab"
 				).stringValue(
-					URL_SCHEMA_ORG
+					"http://schema.org/"
 				)),
-			arrayBuilder -> arrayBuilder.addString(URL_HYDRA_PROFILE)
+			arrayBuilder -> arrayBuilder.addString(
+				"https://www.w3.org/ns/hydra/core#")
 		);
 	}
 
