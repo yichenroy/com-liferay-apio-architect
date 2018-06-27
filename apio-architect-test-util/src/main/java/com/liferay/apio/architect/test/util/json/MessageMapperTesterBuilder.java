@@ -25,6 +25,7 @@ import com.google.gson.JsonObject;
 
 import com.liferay.apio.architect.error.APIError;
 import com.liferay.apio.architect.functional.Try;
+import com.liferay.apio.architect.impl.internal.message.json.BatchResultMessageMapper;
 import com.liferay.apio.architect.impl.internal.message.json.DocumentationMessageMapper;
 import com.liferay.apio.architect.impl.internal.message.json.ErrorMessageMapper;
 import com.liferay.apio.architect.impl.internal.message.json.FormMessageMapper;
@@ -32,6 +33,7 @@ import com.liferay.apio.architect.impl.internal.message.json.MessageMapper;
 import com.liferay.apio.architect.impl.internal.message.json.PageMessageMapper;
 import com.liferay.apio.architect.impl.internal.message.json.SingleModelMessageMapper;
 import com.liferay.apio.architect.impl.internal.writer.ErrorWriter;
+import com.liferay.apio.architect.test.util.internal.writer.MockBatchResultWriter;
 import com.liferay.apio.architect.test.util.internal.writer.MockDocumentationWriter;
 import com.liferay.apio.architect.test.util.internal.writer.MockFormWriter;
 import com.liferay.apio.architect.test.util.internal.writer.MockPageWriter;
@@ -182,6 +184,26 @@ public class MessageMapperTesterBuilder {
 		}
 
 		/**
+		 * Creates a {@code batch.json.auto} file inside the {@code
+		 * src/test/resources} directory in the provided path. The file will
+		 * contain the representation created by the message mapper.
+		 *
+		 * @param  batchResultMessageMapper the message mapper
+		 * @return the next step of the builder
+		 * @review
+		 */
+		public MessageMapperStep createPageFile(
+			BatchResultMessageMapper<String> batchResultMessageMapper) {
+
+			JsonObject jsonObject = MockBatchResultWriter.write(
+				_httpHeaders, batchResultMessageMapper);
+
+			_createFile(jsonObject.toString(), "batch");
+
+			return this;
+		}
+
+		/**
 		 * Creates a {@code page.json.auto} file inside the {@code
 		 * src/test/resources} directory in the provided path. The file will
 		 * contain the representation created by the message mapper.
@@ -217,6 +239,27 @@ public class MessageMapperTesterBuilder {
 				_httpHeaders, singleModelMessageMapper);
 
 			_createFile(jsonObject.toString(), "single_model");
+
+			return this;
+		}
+
+		/**
+		 * Validates that the output created by the provided message mapper
+		 * matches the content of the {@code /src/test/resources/batch.json}
+		 * file.
+		 *
+		 * @param  batchResultMessageMapper the message mapper
+		 * @return the next step of the builder
+		 * @review
+		 */
+		public MessageMapperStep validateBatchResultMessageMapper(
+			BatchResultMessageMapper<String> batchResultMessageMapper) {
+
+			JsonObject jsonObject = MockBatchResultWriter.write(
+				_httpHeaders, batchResultMessageMapper);
+
+			_validateMessageMapper(
+				batchResultMessageMapper, jsonObject.toString(), "batch");
 
 			return this;
 		}
