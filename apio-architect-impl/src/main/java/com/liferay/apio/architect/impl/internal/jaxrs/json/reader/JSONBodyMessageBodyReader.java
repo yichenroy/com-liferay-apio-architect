@@ -84,14 +84,20 @@ public class JSONBodyMessageBodyReader implements MessageBodyReader<Body> {
 	private static Body _getBody(InputStream entityStream) {
 		Gson gson = new Gson();
 
-		return Try.fromFallibleWithResources(
+		JsonElement jsonElement = Try.fromFallibleWithResources(
 			() -> new InputStreamReader(entityStream, UTF_8),
-			streamReader -> gson.fromJson(streamReader, JsonObject.class)
-		).map(
-			JSONBodyMessageBodyReader::_getBody
-		).recover(
-			__ -> _getListBody(entityStream, gson)
+			streamReader -> gson.fromJson(streamReader, JsonElement.class)
+		).filter(
+			element -> element.isJsonObject() || element.isJsonArray()
+		).orElseThrow(
+			() -> new BadRequestException("Body is not a valid JSON")
 		);
+
+		if (jsonElement.isJsonObject()) {
+			return _getBody(jsonElement.getAsJsonObject());
+		}
+
+		return _getListBody(jsonElement.getAsJsonArray());
 	}
 
 	private static Body _getBody(JsonObject jsonObject) {
@@ -134,10 +140,9 @@ public class JSONBodyMessageBodyReader implements MessageBodyReader<Body> {
 		return jsonElements;
 	}
 
-	private static Body _getListBody(InputStream entityStream, Gson gson) {
-		return Try.fromFallibleWithResources(
-			() -> new InputStreamReader(entityStream, UTF_8),
-			streamReader -> gson.fromJson(streamReader, JsonArray.class)
+	private static Body _getListBody(JsonArray jsonArray) {
+		return Try.success(
+			jsonArray
 		).map(
 			JSONBodyMessageBodyReader::_getJsonElements
 		).map(
@@ -155,7 +160,7 @@ public class JSONBodyMessageBodyReader implements MessageBodyReader<Body> {
 		).map(
 			Body::create
 		).orElseThrow(
-			() -> new BadRequestException("Body is not a valid JSON")
+			() -> new BadRequestException("Body is not a valid JSON Array")
 		);
 	}
 
