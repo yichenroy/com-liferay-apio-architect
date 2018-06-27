@@ -38,6 +38,8 @@ public class JSONLDMessageMapperTest {
 			Mockito.mock(HttpHeaders.class)
 		).mediaType(
 			"application/ld+json"
+		).validateBatchResultMessageMapper(
+			new JSONLDBatchResultMessageMapper<>()
 		).validateDocumentationMessageMapper(
 			new JSONLDDocumentationMessageMapper()
 		).validateErrorMessageMapper(
