@@ -83,6 +83,8 @@ public class FailureFilter implements ContainerResponseFilter {
 			headers.add(CONTENT_TYPE, mediaType.toString());
 		}
 
+		System.out.println("This is a test message for testing SF");
+
 		containerResponseContext.setEntity(response.getEntity());
 	}
 
