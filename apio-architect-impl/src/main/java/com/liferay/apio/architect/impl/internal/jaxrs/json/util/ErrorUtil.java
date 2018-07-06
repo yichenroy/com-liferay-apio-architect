@@ -53,6 +53,8 @@ public class ErrorUtil {
 		Optional<APIError> apiErrorOptional = _exceptionMapperManager.map(
 			exception);
 
+		System.out.println("Test SF issues");
+
 		if (!apiErrorOptional.isPresent()) {
 			Class<? extends Exception> exceptionClass = exception.getClass();
 
